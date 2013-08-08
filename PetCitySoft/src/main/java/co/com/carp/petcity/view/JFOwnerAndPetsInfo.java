@@ -19,7 +19,7 @@ import javax.swing.border.BevelBorder;
 import co.com.carp.petcity.controller.PetAndOwnerInfoTabController;
 import co.com.carp.petcity.entity.Owner;
 
-public class JFPetAndOwnerInfoTab extends JFrame implements ActionListener, Observer {
+public class JFOwnerAndPetsInfo extends JFrame implements ActionListener, Observer {
 
 	/**
 	 * Default serial version.
@@ -31,27 +31,24 @@ public class JFPetAndOwnerInfoTab extends JFrame implements ActionListener, Obse
 	/**
 	 * Create the frame.
 	 */
-	public JFPetAndOwnerInfoTab() {
+	public JFOwnerAndPetsInfo() {
 		super();
+		this.setTitle("Pet city soft- Propietarios");
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(JFOwnerAndPetsInfo.class.getResource("/co/com/carp/petcity/image/dog1.png")));
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLayout(new BorderLayout());
 		//Initialize controller
 		this.controller = new PetAndOwnerInfoTabController();
 		//Get data to display in screen
 		Set<Owner> ownerSet = this.controller.queryOwnerInfo("");
-		//Create screen components
-		this.setTitle("Pet city soft- Propietarios");
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(JFPetAndOwnerInfoTab.class.getResource("/co/com/carp/petcity/image/dog1.png")));
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new BorderLayout());
+		//Create screen components		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setBounds(0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight() - 40);
-		//Tool bar menu
-		this.add(new JTPetCityTools(JTPetCityTools.TOOLBAR_PET_OWNER_INFO), BorderLayout.NORTH);
 		//Owner list to do searches
-		JPSearchAndList searchAndList = new JPSearchAndList();
-		searchAndList.addObserver(this);
-		this.add(searchAndList.createSearchAndListSection(ownerSet, (int) screenSize.getHeight()), BorderLayout.WEST);		
+		JPOwnerCardList searchAndList = new JPOwnerCardList();
+		searchAndList.addObserver(this);				
 		//Owner info
-		JPanel jpnCentral = new JPanel();
+		JPanel jpnCentral = new JPanel(new BorderLayout());
 		jpnCentral.setSize((int)screenSize.getWidth() - 260, (int) screenSize.getHeight() - 80);
 		jpnCentral.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		jpnCentral.setBackground(Color.WHITE);
@@ -59,9 +56,15 @@ public class JFPetAndOwnerInfoTab extends JFrame implements ActionListener, Obse
 		JPOwnerInfo jpnOwnerInfo = new JPOwnerInfo(owner);
 		jpnOwnerInfo.setPreferredSize(new Dimension((int)screenSize.getWidth() - 260, (int) screenSize.getHeight() - 80));
 		jpnOwnerInfo.setBackground(Color.WHITE);
-		jpnCentral.add(jpnOwnerInfo);
-		this.controller.keepCopyFromOwnerInfoPanel(jpnOwnerInfo);
+		jpnCentral.add(jpnOwnerInfo, BorderLayout.CENTER);
+		JPPetCardList jpPetCard = new JPPetCardList(owner.getPetSet(), (int)screenSize.getWidth() - 260);
+		jpnCentral.add(jpPetCard, BorderLayout.SOUTH);
+		this.controller.keepCopyFromPetCardPanel(jpPetCard);
+		//Add objects to frame
+		this.add(new JTPetCityTools(JTPetCityTools.TOOLBAR_PET_OWNER_INFO), BorderLayout.NORTH);
 		this.add(jpnCentral, BorderLayout.CENTER);
+		this.add(searchAndList.createSearchAndListSection(ownerSet, (int) screenSize.getHeight() - 80), BorderLayout.WEST);
+		this.controller.keepCopyFromOwnerInfoPanel(jpnOwnerInfo);		
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package co.com.carp.petcity.entity;
 
-import java.util.HashSet;
+import java.util.Map;
 
 /**
  * This class is attempt to manage pet type 
@@ -22,7 +22,7 @@ public class PetType {
 	/**
 	 * A set of breed enabled to pet type
 	 * */
-	private HashSet<PetBreed> breedSet;
+	private Map<Integer, PetBreed> breedMap;
 	
 	/**
 	 * Current breed by pet
@@ -57,18 +57,20 @@ public class PetType {
 		this.name = name;
 	}
 
+	
+
 	/**
 	 * @return the breedSet
 	 */
-	public HashSet<PetBreed> getBreedSet() {
-		return breedSet;
+	public Map<Integer, PetBreed> getBreedMap() {
+		return breedMap;
 	}
 
 	/**
 	 * @param breedSet the breedSet to set
 	 */
-	public void setBreedSet(HashSet<PetBreed> breedSet) {
-		this.breedSet = breedSet;
+	public void setBreedMap(Map<Integer, PetBreed> breedMap) {
+		this.breedMap = breedMap;
 	}
 
 	/**
@@ -99,7 +101,7 @@ public class PetType {
 	@Override
 	public String toString() {
 		return "PetType={identification:" + this.identification + ";name:" + this.name + 
-				";breedSet:" + this.breedSet.toString() + ";breedSelected:" + this.breedSelected +
+				";breedSet:" + this.getBreedMap().toString() + ";breedSelected:" + this.breedSelected +
 				"}";
 	}
 

@@ -148,7 +148,7 @@ public class JDLogin extends JDialog implements ActionListener {
 			if(loginCtrl.doAcceptAction(this.jtfUser.getText(), this.jpfPassword.getPassword())) {
 				this.setVisible(false);
 				Configuration.getInstance().readConfiguration();
-				new JFPetAndOwnerInfoTab().setVisible(true);
+				new JFOwnerAndPetsInfo().setVisible(true);
 			}
 		} else if (evt.getSource().equals(jbtCancel)) {
 			if (loginCtrl.doCancelAction()) {

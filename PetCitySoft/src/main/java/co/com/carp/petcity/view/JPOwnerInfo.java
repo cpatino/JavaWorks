@@ -201,13 +201,18 @@ public class JPOwnerInfo extends JPanel {
 		this.jtfOwnerId.setText(this.owner.getDocumentId() + "");
 	}
 	
-	public void replaceOwnerInformation(Owner owner) {
-		this.owner = owner;
-		if (owner == null) {
-			this.initializeDisableAllComponents();
-		} else {
-			this.doEnableAllComponents();
-			this.fillFields();
+	public boolean replaceOwnerInformation(Owner owner) {
+		boolean canReplace = false;
+		if (!this.owner.equals(owner)) {
+			this.owner = owner;
+			if (owner == null) {
+				this.initializeDisableAllComponents();
+			} else {
+				this.doEnableAllComponents();
+				this.fillFields();
+			}
+			canReplace = true;
 		}
+		return canReplace;
 	}
 }

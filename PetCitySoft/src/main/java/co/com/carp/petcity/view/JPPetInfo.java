@@ -18,17 +18,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import co.com.carp.petcity.entity.Pet;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilCalendarModel;
 
-public class JPPetInfo extends JPanel implements ActionListener {
+public class JPPetInfo extends JPanel implements ActionListener {	
 	
 	/**
-	 * Default serial version
+	 * Auto-generated serial version
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1250251333816555407L;
 	
+	private Pet pet;
+
 	private JTextField jtfName;
 	
 	private JComboBox<String> jcbKind;
@@ -55,12 +58,11 @@ public class JPPetInfo extends JPanel implements ActionListener {
 	
 	private JComboBox<String> jcbReproduction;
 	
-	private JLabel jlbPhoto;
-	
 	private JButton jbtLoadImage;
 	
-	public JPPetInfo() {
-		super();		
+	public JPPetInfo(Pet pet) {
+		super();
+		this.pet = pet;
 		this.setLayout(null);
 		Font verdanaBold = new Font("Verdana", Font.BOLD, 12);
 		Font verdanaPlain = new Font("Verdana", Font.PLAIN, 12);
@@ -84,11 +86,7 @@ public class JPPetInfo extends JPanel implements ActionListener {
 		
 		//Inicializar deshabilitados todos los componentes para no permitir editarlos.
 		this.initializeDisableAllComponents();
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		
+		this.fillFields();
 	}
 	
 	private JPanel drawnGeneralDataPanel(Font verdanaBold, Font verdanaPlain) {
@@ -109,7 +107,7 @@ public class JPPetInfo extends JPanel implements ActionListener {
 		JLabel jlbPetKind = new JLabel("Especie:");
 		jlbPetKind.setBounds(10, 40, 100, 20);
 		jlbPetKind.setFont(verdanaBold);
-		jcbKind = new JComboBox<String>(new String[]{"Seleccione uno", "Canino", "Felino", "Otro"});
+		jcbKind = new JComboBox<String>(new String[]{"Seleccione uno"});
 		jcbKind.setBounds(150, 40, 200, 20);
 		jcbKind.setFont(verdanaPlain);
 		jcbKind.addActionListener(this);
@@ -254,7 +252,7 @@ public class JPPetInfo extends JPanel implements ActionListener {
 		jpnPetImage.setBounds(380, 70, 360, 390);
 		jpnPetImage.setBackground(new Color(250, 245, 245));
 		
-		jlbPhoto = new JLabel(new ImageIcon(JPPetInfo.class.getResource("/co/com/carp/petcity/image/background-white.png")));
+		JLabel jlbPhoto = new JLabel(new ImageIcon(JPPetInfo.class.getResource("/co/com/carp/petcity/image/background-white.png")));
 		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.getViewport().add(jlbPhoto);
 		jpnPetImage.add(scrollPane, BorderLayout.CENTER);
@@ -292,6 +290,18 @@ public class JPPetInfo extends JPanel implements ActionListener {
 		((JButton)jdcDewormingDate.getComponent(1)).setEnabled(false);
 		this.jcbReproduction.setEnabled(false);
 		this.jbtLoadImage.setEnabled(false);
+	}
+	
+	/**
+	 * It fills text fields with the pet information.
+	 */
+	private void fillFields() {
+		this.jtfName.setText(pet.getName());
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		
 	}
 }
 

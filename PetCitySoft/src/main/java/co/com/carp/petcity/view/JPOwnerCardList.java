@@ -14,23 +14,33 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.border.BevelBorder;
 
 import co.com.carp.petcity.entity.Owner;
 
-public class JPSearchAndList extends Observable implements ActionListener {
+public class JPOwnerCardList extends Observable implements ActionListener, ObjectCardListable {
 	
 	private JTextField jtfSearch;
-
-	private JButton jbtSearch;
 	
 	private Set<Owner> ownerSet;
 	
-	public JPanel createSearchAndListSection(Set<Owner> ownerSet, int maxHeight) {
+	private JPanel jpSearchAndList;
+	
+	/**
+	 * It creates a panel that contains in top of it, components to do search by owners,
+	 * and below it, a list of owner card.
+	 * 
+	 * @param ownerSet Owner set that will be used to create owner cards.
+	 * @param height Height that must have the panels that will be created.
+	 * @return JPanel Panel with two section: First one to search and second one to
+	 * 			list all owner that accomplish the search's parameter.
+	 */
+	public JPanel createSearchAndListSection(Set<Owner> ownerSet, int height) {
 		this.ownerSet = ownerSet;
-		JPanel jpSearchAndList = new JPanel();
-		jpSearchAndList.setLayout(new BorderLayout());
-		jpSearchAndList.setSize(new Dimension(250, (int) maxHeight - 80));		
+		this.jpSearchAndList = new JPanel();
+		this.jpSearchAndList.setLayout(new BorderLayout());
+		this.jpSearchAndList.setSize(new Dimension(250, height));		
 		
 		JPanel jpnSubPanelSearch = new JPanel(null);
 		jpnSubPanelSearch.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.GRAY, Color.GRAY));
@@ -40,15 +50,49 @@ public class JPSearchAndList extends Observable implements ActionListener {
 		jtfSearch = new JTextField();
 		jtfSearch.setBounds(5, 10, 230, 20);
 		jpnSubPanelSearch.add(jtfSearch);
-		jbtSearch = new JButton("BUSCAR");
+		JButton jbtSearch = new JButton("BUSCAR");
 		jbtSearch.setForeground(new Color(255, 255, 255));
 		jbtSearch.setBounds(145, 35, 89, 23);
 		jbtSearch.setBackground(new Color(30, 144, 255));
 		jbtSearch.setFont(new Font("Verdana", Font.BOLD, 12));
 		jbtSearch.addActionListener(this);
-		jpnSubPanelSearch.add(jbtSearch);
+		jpnSubPanelSearch.add(jbtSearch);				
+				
+		JScrollPane jspScroll = new JScrollPane(this.buildViewPort()
+				, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		jspScroll.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		jspScroll.setAutoscrolls(true);	
 		
-		jpSearchAndList.add(jpnSubPanelSearch, BorderLayout.NORTH);		
+		this.jpSearchAndList.add(jpnSubPanelSearch, BorderLayout.NORTH);
+		this.jpSearchAndList.add(jspScroll, BorderLayout.CENTER);
+		return this.jpSearchAndList;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent evt) {
+		if (evt.getActionCommand().equals("Ver")) {
+			int id = Integer.parseInt(((JButton)evt.getSource()).getName());
+			for (Owner owner : ownerSet) {
+				if (owner.getIdentification() == id) {
+					setChanged();
+					notifyObservers(owner);
+					break;
+				}
+			}			
+		} else if (evt.getActionCommand().equals("BUSCAR")) {
+			
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void updateCards(Set<?> objectSet) {
+		this.ownerSet = (Set<Owner>) objectSet;
+		this.refreshCardList();
+	}
+
+	@Override
+	public JPanel buildViewPort() {
 		JPanel jpViewPort = new JPanel(null);
 		jpViewPort.setBackground(Color.WHITE);
 		int height = ownerSet != null ? 80 * ownerSet.size() : 80;
@@ -59,7 +103,7 @@ public class JPSearchAndList extends Observable implements ActionListener {
 		int cont = 0;
 		if (ownerSet != null && ownerSet.size() > 0) {
 			for (Owner owner : ownerSet) {
-				JPanel subPanel = this.createOwnerCard(owner);
+				JPanel subPanel = this.createCard(owner);
 				subPanel.setBounds(0, yForNextSubPanel, 230, 80);
 				yForNextSubPanel = yForNextSubPanel + 80;
 	
@@ -69,15 +113,13 @@ public class JPSearchAndList extends Observable implements ActionListener {
 				}
 				cont++;
 			}
-		}		
-		JScrollPane jspScroll = new JScrollPane(jpViewPort, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		jspScroll.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		jspScroll.setAutoscrolls(true);		
-		jpSearchAndList.add(jspScroll, BorderLayout.CENTER);
-		return jpSearchAndList;
+		}			
+		return jpViewPort;
 	}
-	
-	private JPanel createOwnerCard(Owner owner) {
+
+	@Override
+	public JPanel createCard(Object object) {
+		Owner owner = (Owner) object;
 		JPanel jpOwnerCard = new JPanel();
 		jpOwnerCard.setLayout(null);
 		Font verdanaBold = new Font("Verdana", Font.BOLD, 12);
@@ -103,19 +145,14 @@ public class JPSearchAndList extends Observable implements ActionListener {
 		jpOwnerCard.add(jbtViewDetail);
 		return jpOwnerCard;
 	}
-	
+
 	@Override
-	public void actionPerformed(ActionEvent evt) {
-		if (evt.getActionCommand().equals("Ver")) {
-			int id = Integer.parseInt(((JButton)evt.getSource()).getName());
-			for (Owner owner : ownerSet) {
-				if (owner.getIdentification() == id) {
-					setChanged();
-					notifyObservers(owner);
-					break;
-				}
-			}
-			
-		}
+	public void refreshCardList() {
+		JScrollPane jspScroll = (JScrollPane)this.jpSearchAndList.getComponent(1);
+		JViewport jvpViewPort = jspScroll.getViewport();
+		jvpViewPort.removeAll();
+		jvpViewPort.add(this.buildViewPort());		
+		this.jpSearchAndList.add(jspScroll, BorderLayout.CENTER, 0);
+		this.jpSearchAndList.updateUI();
 	}
 }

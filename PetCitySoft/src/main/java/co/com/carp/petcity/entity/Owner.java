@@ -1,6 +1,6 @@
 package co.com.carp.petcity.entity;
 
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class is attempt to be an implementation of person, this class represent 
@@ -28,7 +28,7 @@ public class Owner extends Person implements Comparable<Owner> {
 	/**
 	 * Pet set from owner
 	 */
-	private HashSet<Pet> petSet;
+	private Set<Pet> petSet;
 	
 	/**
 	 * @return the address
@@ -75,14 +75,14 @@ public class Owner extends Person implements Comparable<Owner> {
 	/**
 	 * @return the petSet
 	 */
-	public HashSet<Pet> getPetSet() {
+	public Set<Pet> getPetSet() {
 		return petSet;
 	}
 
 	/**
 	 * @param petSet the petSet to set
 	 */
-	public void setPetSet(HashSet<Pet> petSet) {
+	public void setPetSet(Set<Pet> petSet) {
 		this.petSet = petSet;
 	}
 
