@@ -26,6 +26,12 @@ import javax.swing.border.EmptyBorder;
 import co.com.carp.petcity.controller.LoginController;
 import co.com.carp.petcity.util.Configuration;
 
+/**
+ * This class is attempt to manage the application login screen.
+ * 
+ * @author Carlos Rodriguez
+ *
+ */
 public class JDLogin extends JDialog implements ActionListener {
 
 	/**
@@ -116,7 +122,7 @@ public class JDLogin extends JDialog implements ActionListener {
 	/**
 	 * It creates a new menu bar that will be associated with the JFrame. 
 	 * 
-	 * @return JMenuBar new menu to be associated with the JFrame.
+	 * @return {@link JMenuBar} new menu to be associated with the JFrame.
 	 */
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
@@ -147,7 +153,7 @@ public class JDLogin extends JDialog implements ActionListener {
 		if (evt.getSource().equals(jbtLogin)) {
 			if(loginCtrl.doAcceptAction(this.jtfUser.getText(), this.jpfPassword.getPassword())) {
 				this.setVisible(false);
-				Configuration.getInstance().readConfiguration();
+				Configuration.getInstance().readDatabaseConfiguration();
 				new JFOwnerAndPetsInfo().setVisible(true);
 			}
 		} else if (evt.getSource().equals(jbtCancel)) {

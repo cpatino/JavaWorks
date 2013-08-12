@@ -18,10 +18,26 @@ import javax.crypto.spec.SecretKeySpec;
 
 import javax.mail.internet.MimeUtility;
 
+/**
+ * This class is attempt to manage cryptography process.
+ * 
+ * @author Carlos Rodriguez
+ *
+ */
 public class Security {
 	
+	/**
+	 * Cryptography key to generate new data encrypted.
+	 */
 	private final static String keyBuffer = "53ba43c1";
 
+	/**
+	 * It will encode data that is passed as parameter.
+	 * 
+	 * @param b byte array to be encoded
+	 * @return byte array encoded
+	 * @throws Exception Any exception that can throw the process.
+	 */
 	private static byte[] encode(byte[] b) throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		OutputStream b64os = MimeUtility.encode(baos, "base64");
@@ -30,6 +46,13 @@ public class Security {
 		return baos.toByteArray();
 	}
 
+	/**
+	 * It will decode data that is passed as parameter.
+	 * 
+	 * @param b byte array to be decode
+	 * @return byte array decode
+	 * @throws Exception Any exception that can throw the process.
+	 */
 	private static byte[] decode(byte[] b) throws Exception {
 		ByteArrayInputStream bais = new ByteArrayInputStream(b);
 		InputStream b64is = MimeUtility.decode(bais, "base64");
@@ -40,11 +63,24 @@ public class Security {
 		return res;
 	}
 
+	/**
+	 * It creates secret key to be used on cryptography process.
+	 * 
+	 * @return {@link SecretKeySpec} to be used.
+	 */
 	private static SecretKeySpec getKey() {
 		SecretKeySpec key = new SecretKeySpec(keyBuffer.getBytes(), "DES");
 		return key;
 	}
 
+	/**
+	 * It decrypts the {@link String} that is passed as parameter.
+	 * 
+	 * @param s {@link String} to be decrypted.
+	 * @return {@link String} decrypted.
+	 * @throws NoSuchAlgorithmException The algorithm specified can not be found.
+	 * @throws Exception Any exception that can throw the process.
+	 */
 	public static String decrypt(String s) throws NoSuchAlgorithmException, Exception {
 		String s1 = null;
 		if (s.indexOf("{ENC}") != -1) {
@@ -59,6 +95,14 @@ public class Security {
 		return s1;
 	}
 
+	/**
+	* It encrypts the {@link String} that is passed as parameter.
+	 * 
+	 * @param s {@link String} to be encrypted.
+	 * @return {@link String} encrypted.
+	 * @throws NoSuchAlgorithmException The algorithm specified can not be found.
+	 * @throws Exception Any exception that can throw the process.
+	 */
 	public static String encrypt(String s) throws NoSuchAlgorithmException, Exception {
 		byte abyte0[];
 		SecureRandom securerandom = new SecureRandom();

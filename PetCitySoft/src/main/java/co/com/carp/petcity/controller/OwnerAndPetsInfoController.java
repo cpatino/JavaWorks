@@ -3,18 +3,33 @@ package co.com.carp.petcity.controller;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import javax.swing.JFrame;
 
 import co.com.carp.petcity.entity.Owner;
 import co.com.carp.petcity.entity.Pet;
 import co.com.carp.petcity.entity.PetBreed;
 import co.com.carp.petcity.entity.PetType;
+import co.com.carp.petcity.view.JFOwnerAndPetsInfo;
+import co.com.carp.petcity.view.JPOwnerCardList;
 import co.com.carp.petcity.view.JPOwnerInfo;
 import co.com.carp.petcity.view.JPPetCardList;
+import co.com.carp.petcity.view.JPPetInfo;
 
-public class PetAndOwnerInfoTabController {
+/**
+ * This class is attempt to control all communication between panels done on
+ * {@link JFOwnerAndPetsInfo}, it will be in control of all process and request
+ * that {@link JFrame} request.
+ * 
+ * @author Carlos Rodriguez
+ *
+ */
+public class OwnerAndPetsInfoController implements Observer {
 	
 	/**
 	 * Copy from actual set that is being displayed
@@ -25,6 +40,11 @@ public class PetAndOwnerInfoTabController {
 	 * Copy from owner information's panel
 	 */
 	private JPOwnerInfo jpOwnerInfo;
+	
+	/**
+	 * Copy from pet information's panel
+	 */
+	private JPPetInfo jpPetInfo;
 	
 	/**
 	 * Copy from pet card's scroll panel
@@ -99,13 +119,23 @@ public class PetAndOwnerInfoTabController {
 	}
 	
 	/**
-	 * It keeps a copy from central panel, this copy can be used to change the owner
+	 * It keeps a copy from owner information panel, this copy can be used to change the owner
 	 * being displayed.
 	 * 
 	 * @param jpOwnerInfo Panel with owner info.
 	 */
 	public void keepCopyFromOwnerInfoPanel(JPOwnerInfo jpOwnerInfo) {
 		this.jpOwnerInfo = jpOwnerInfo;
+	}
+	
+	/**
+	 * It keeps a copy from pet information panel, this copy can be used to change the owner
+	 * being displayed.
+	 * 
+	 * @param jpOwnerInfo Panel with owner info.
+	 */
+	public void keepCopyFromPetInfoPanel(JPPetInfo jpPetInfo) {
+		this.jpPetInfo = jpPetInfo;
 	}
 	
 	/**
@@ -124,8 +154,18 @@ public class PetAndOwnerInfoTabController {
 	 * @param owner New owner to be displayed.
 	 */
 	public void changeOwnerInOwnerInfoPanel(Owner owner) {
-		if (this.jpOwnerInfo.replaceOwnerInformation(owner)) {
+		if (this.jpOwnerInfo != null && this.jpOwnerInfo.updateInformation(owner)) {
 			this.changePetCardList(owner.getPetSet());
+		}
+	}
+	
+	/**
+	 * It tries to replace the information being displayed on pet info panel.
+	 * 
+	 * @param pet New pet to be displayed.
+	 */
+	public void changePetInPetInfoPanel(Pet pet) {
+		if (this.jpPetInfo != null && this.jpPetInfo.updateInformation(pet)) {
 		}
 	}
 	
@@ -137,4 +177,14 @@ public class PetAndOwnerInfoTabController {
 	private void changePetCardList(Set<Pet> petSet) {
 		this.jpPetCard.updateCards(petSet);
 	}
+	
+	@Override
+	public void update(Observable observable, Object arg) {
+		if (observable instanceof JPOwnerCardList) {
+			this.changeOwnerInOwnerInfoPanel((Owner)arg);
+		} else if (observable instanceof JPPetCardList) {
+			this.changePetInPetInfoPanel((Pet)arg);
+		}
+	}
+
 }

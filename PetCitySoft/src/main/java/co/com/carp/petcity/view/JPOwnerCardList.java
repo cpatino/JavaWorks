@@ -19,25 +19,34 @@ import javax.swing.border.BevelBorder;
 
 import co.com.carp.petcity.entity.Owner;
 
+/**
+ * This class is attempt to manage all owner information being displayed on card list.
+ * 
+ * @author Carlos Rodriguez
+ *
+ */
 public class JPOwnerCardList extends Observable implements ActionListener, ObjectCardListable {
 	
+	/**
+	 * {@link JTextField} that will be parameter to be search when client wants to change information
+	 * displayed on the list.
+	 */
 	private JTextField jtfSearch;
 	
+	/**
+	 * {@link Owner} {@link Set} that will be displayed on screen.
+	 */
 	private Set<Owner> ownerSet;
 	
+	/**
+	 * {@link JPanel} with all components to be displayed.
+	 */
 	private JPanel jpSearchAndList;
 	
-	/**
-	 * It creates a panel that contains in top of it, components to do search by owners,
-	 * and below it, a list of owner card.
-	 * 
-	 * @param ownerSet Owner set that will be used to create owner cards.
-	 * @param height Height that must have the panels that will be created.
-	 * @return JPanel Panel with two section: First one to search and second one to
-	 * 			list all owner that accomplish the search's parameter.
-	 */
-	public JPanel createSearchAndListSection(Set<Owner> ownerSet, int height) {
-		this.ownerSet = ownerSet;
+	@SuppressWarnings("unchecked")
+	@Override
+	public JPanel createSearchAndListSection(Set<?> ownerSet, int height) {
+		this.ownerSet = (Set<Owner>) ownerSet;
 		this.jpSearchAndList = new JPanel();
 		this.jpSearchAndList.setLayout(new BorderLayout());
 		this.jpSearchAndList.setSize(new Dimension(250, height));		
@@ -109,11 +118,11 @@ public class JPOwnerCardList extends Observable implements ActionListener, Objec
 	
 				jpViewPort.add(subPanel);
 				if (cont % 2 == 1) {
-					subPanel.setBackground(Color.WHITE);
+					subPanel.setBackground(new Color(220, 220, 200));
 				}
 				cont++;
 			}
-		}			
+		}		
 		return jpViewPort;
 	}
 

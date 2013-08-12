@@ -12,25 +12,52 @@ import javax.swing.border.EmptyBorder;
 
 import co.com.carp.petcity.entity.Owner;
 
-public class JPOwnerInfo extends JPanel {
+/**
+ * This class is attempt to manage information from owners, those information can be inserted, updated.
+ * 
+ * @author Carlos Rodriguez
+ *
+ */
+public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 
 	/**
 	 * Auto-generated serial version
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * {@link JTextField} that stores owner's name
+	 */
 	private JTextField jtfOwnerName;
 	
+	/**
+	 * {@link JTextField} that stores owner's document identification number.
+	 */
 	private JTextField jtfOwnerId;
 	
+	/**
+	 * {@link JTextField} that stores owner's address.
+	 */
 	private JTextField jtfOwnerAddress;
 	
+	/**
+	 * {@link JTextField} that stores owner's phone number.
+	 */
 	private JTextField jtfOwnerPhone;
 	
+	/**
+	 * {@link JTextField} that stores owner's cellphone number.
+	 */
 	private JTextField jtfOwnerCellphone;
 	
+	/**
+	 * {@link JTextField} that stores owner's email.
+	 */
 	private JTextField jtfOwnerEmail;
 	
+	/**
+	 * {@link Owner} that is being displayed on screen.
+	 */
 	private Owner owner;
 	
 	/**
@@ -56,7 +83,7 @@ public class JPOwnerInfo extends JPanel {
 		jpnTitle.add(jlTitle);
 		
 		this.add(jpnTitle);
-		this.add(this.createOwnerInfoPanel(verdanaBold, verdanaPlain));
+		this.add(this.createInfoPanel(verdanaBold, verdanaPlain));
 		if (owner == null) {
 			this.initializeDisableAllComponents();
 		} else {
@@ -65,17 +92,11 @@ public class JPOwnerInfo extends JPanel {
 		}
 	}
 	
-	/**
-	 * It creates the owner information panel.
-	 * 
-	 * @param verdanaBold Verdana font in bold.
-	 * @param verdanaPlain Verdana font plain.
-	 * @return
-	 */
-	private JPanel createOwnerInfoPanel(Font verdanaBold, Font verdanaPlain) {
+	@Override
+	public JPanel createInfoPanel(Font verdanaBold, Font verdanaPlain) {
 		JPanel jpnOwnerDetail = new JPanel(null);
 		jpnOwnerDetail.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		jpnOwnerDetail.setBounds(10, 70, 730, 180);
+		jpnOwnerDetail.setBounds(10, 45, 730, 140);
 		jpnOwnerDetail.setBackground(new Color(250, 245, 245));
 		
 		JLabel jlbOwnerId = new JLabel("Cedula:");
@@ -148,10 +169,8 @@ public class JPOwnerInfo extends JPanel {
 		return jpnOwnerDetail;
 	}
 	
-	/**
-	 * It sets default value to all text fields on screen.
-	 */
-	private void cleanAllFields() {
+	@Override
+	public void cleanAllFields() {
 		this.jtfOwnerName.setText("");
 		this.jtfOwnerAddress.setText("");
 		this.jtfOwnerPhone.setText("0");
@@ -160,10 +179,8 @@ public class JPOwnerInfo extends JPanel {
 		this.jtfOwnerId.setText("");
 	}
 	
-	/**
-	 * When screen doesn't have an owner to be displayed, all text field becomes disabled. 
-	 */
-	private void initializeDisableAllComponents() {
+	@Override
+	public void initializeDisableAllComponents() {
 		if (owner == null) {
 			this.jtfOwnerName.setEditable(false);
 			this.jtfOwnerAddress.setEditable(false);
@@ -175,10 +192,8 @@ public class JPOwnerInfo extends JPanel {
 		}
 	}
 	
-	/**
-	 * It make able all text fields. 
-	 */
-	private void doEnableAllComponents() {
+	@Override
+	public void doEnableAllComponents() {
 		if (owner != null) {
 			this.jtfOwnerName.setEditable(true);
 			this.jtfOwnerAddress.setEditable(true);
@@ -189,10 +204,8 @@ public class JPOwnerInfo extends JPanel {
 		}
 	}
 	
-	/**
-	 * It fills text fields with the owner information.
-	 */
-	private void fillFields() {
+	@Override
+	public void fillFields() {
 		this.jtfOwnerName.setText(this.owner.getName());
 		this.jtfOwnerAddress.setText(this.owner.getAddress());
 		this.jtfOwnerPhone.setText(this.owner.getPhone() + "");
@@ -201,10 +214,11 @@ public class JPOwnerInfo extends JPanel {
 		this.jtfOwnerId.setText(this.owner.getDocumentId() + "");
 	}
 	
-	public boolean replaceOwnerInformation(Owner owner) {
+	@Override
+	public boolean updateInformation(Object owner) {
 		boolean canReplace = false;
-		if (!this.owner.equals(owner)) {
-			this.owner = owner;
+		if (!this.owner.equals((Owner)owner)) {
+			this.owner = (Owner)owner;
 			if (owner == null) {
 				this.initializeDisableAllComponents();
 			} else {

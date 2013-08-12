@@ -7,6 +7,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+/**
+ * This class is attempt to manage different {@link JToolBar}(s) that can be used 
+ * along application.
+ * 
+ * @author Carlos Rodriguez
+ *
+ */
 public class JTPetCityTools extends JToolBar implements ActionListener {
 
 	/**
@@ -20,7 +27,7 @@ public class JTPetCityTools extends JToolBar implements ActionListener {
 	private int idToolBarUsed; 
 	
 	/**
-	 * Tool bar used in "PetAndOwnerInfo" screens. 
+	 * Tool bar used in {@link JFOwnerAndPetsInfo} screens. 
 	 */
 	public static final int TOOLBAR_PET_OWNER_INFO = 1;
 	

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -18,33 +19,49 @@ import javax.swing.border.BevelBorder;
 import co.com.carp.petcity.entity.Pet;
 import co.com.carp.petcity.entity.PetBreed;
 
-public class JPPetCardList extends JPanel implements ActionListener, ObjectCardListable {
+/**
+ * This class is attempt to manage all pet information being displayed on card list.
+ * 
+ * @author Carlos Rodriguez
+ *
+ */
+public class JPPetCardList extends Observable implements ActionListener, ObjectCardListable {
 	
 	/**
-	 * Auto-generated serial version.
+	 * {@link Pet} {@link Set} that will be displayed on screen.
 	 */
-	private static final long serialVersionUID = -998083933459745017L;
-	
 	private Set<Pet> petSet;
 	
 	/**
-	 * Constructor
+	 * {@link JPanel} with all components to be displayed.
 	 */
-	public JPPetCardList(Set<Pet> petSet,int width) {
-		this.petSet = petSet;
-		this.setLayout(new BorderLayout());
-		this.setSize(new Dimension(width, 80));
+	private JPanel jpSearchAndList;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public JPanel createSearchAndListSection(Set<?> petSet, int width) {
+		this.petSet = (Set<Pet>) petSet;
+		this.jpSearchAndList = new JPanel();
+		this.jpSearchAndList.setLayout(new BorderLayout());
+		this.jpSearchAndList.setSize(new Dimension(width, 80));
 		JScrollPane jspScroll = new JScrollPane(this.buildViewPort()
 				, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		jspScroll.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		jspScroll.setAutoscrolls(true);
-		this.add(jspScroll, BorderLayout.CENTER);		
+		this.jpSearchAndList.add(jspScroll, BorderLayout.CENTER);
+		return jpSearchAndList;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		// TODO Auto-generated method stub
-		
+		int id = Integer.parseInt(((JButton)event.getSource()).getName());
+		for (Pet pet : petSet) {
+			if (pet.getIdentification() == id) {
+				setChanged();
+				notifyObservers(pet);
+				break;
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -72,7 +89,7 @@ public class JPPetCardList extends JPanel implements ActionListener, ObjectCardL
 	
 				jpViewPort.add(subPanel);
 				if (cont % 2 == 1) {
-					subPanel.setBackground(Color.WHITE);
+					subPanel.setBackground(new Color(220, 220, 200));
 				}
 				cont++;
 			}
@@ -111,12 +128,12 @@ public class JPPetCardList extends JPanel implements ActionListener, ObjectCardL
 
 	@Override
 	public void refreshCardList() {
-		JScrollPane jspScroll = (JScrollPane)this.getComponent(0);
+		JScrollPane jspScroll = (JScrollPane)this.jpSearchAndList.getComponent(0);
 		JViewport jvpViewPort = jspScroll.getViewport();
 		jvpViewPort.removeAll();
 		jvpViewPort.add(this.buildViewPort());		
-		this.add(jspScroll, BorderLayout.CENTER, 0);
-		this.updateUI();
+		this.jpSearchAndList.add(jspScroll, BorderLayout.CENTER, 0);
+		this.jpSearchAndList.updateUI();
 	}
 
 }
