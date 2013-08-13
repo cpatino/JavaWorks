@@ -86,20 +86,61 @@ public class ClinicHistory {
 	public void setConsultationSet(TreeSet<MedicalConsultation> consultationSet) {
 		this.consultationSet = consultationSet;
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
-	public boolean equals(Object arg) {
-		if (arg == null || !(arg instanceof ClinicHistory)) {
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((consultationSet == null) ? 0 : consultationSet.hashCode());
+		result = prime * result + identification;
+		result = prime * result
+				+ ((openDate == null) ? 0 : openDate.hashCode());
+		result = prime * result + userIdentification;
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
 			return false;
 		}
-		if  (!this.openDate.equals(((ClinicHistory)arg).openDate)
-				|| this.identification != ((ClinicHistory)arg).identification
-				|| this.userIdentification != ((ClinicHistory)arg).userIdentification) {
+		if (!(obj instanceof ClinicHistory)) {
+			return false;
+		}
+		ClinicHistory other = (ClinicHistory) obj;
+		if (consultationSet == null) {
+			if (other.consultationSet != null) {
+				return false;
+			}
+		} else if (!consultationSet.equals(other.consultationSet)) {
+			return false;
+		}
+		if (identification != other.identification) {
+			return false;
+		}
+		if (openDate == null) {
+			if (other.openDate != null) {
+				return false;
+			}
+		} else if (!openDate.equals(other.openDate)) {
+			return false;
+		}
+		if (userIdentification != other.userIdentification) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "PetMedicalHistory={identification:" + this.identification + 

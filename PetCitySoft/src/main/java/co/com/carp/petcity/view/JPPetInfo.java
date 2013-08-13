@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Calendar;
 
 import javax.swing.BorderFactory;
@@ -294,5 +295,32 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 			canReplace = true;
 		}
 		return canReplace;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public Object getObjectDisplayed() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object getObjectOriginal() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

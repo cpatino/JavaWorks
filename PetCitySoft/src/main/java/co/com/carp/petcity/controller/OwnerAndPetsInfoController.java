@@ -1,5 +1,6 @@
 package co.com.carp.petcity.controller;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import co.com.carp.petcity.entity.Owner;
 import co.com.carp.petcity.entity.Pet;
@@ -20,6 +22,7 @@ import co.com.carp.petcity.view.JPOwnerCardList;
 import co.com.carp.petcity.view.JPOwnerInfo;
 import co.com.carp.petcity.view.JPPetCardList;
 import co.com.carp.petcity.view.JPPetInfo;
+import co.com.carp.petcity.view.JTPetCityTools;
 
 /**
  * This class is attempt to control all communication between panels done on
@@ -35,6 +38,11 @@ public class OwnerAndPetsInfoController implements Observer {
 	 * Copy from actual set that is being displayed
 	 */
 	private Set<Owner> ownerSet;
+	
+	/**
+	 * Copy from {@link JTPetCityTools}
+	 */
+	private JTPetCityTools jtPetCityTools;
 	
 	/**
 	 * Copy from owner information's panel
@@ -64,6 +72,9 @@ public class OwnerAndPetsInfoController implements Observer {
 		owner.setIdentification(1);
 		owner.setDocumentId(19604742);
 		owner.setName("Carlos Rodriguez");
+		owner.setCellphone(new BigInteger("3007200405"));
+		owner.setAddress("");
+		owner.setPhone(5109965);
 		
 		Pet pet = new Pet();
 		pet.setIdentification(1);
@@ -113,9 +124,22 @@ public class OwnerAndPetsInfoController implements Observer {
 		owner.setIdentification(2);
 		owner.setDocumentId(1045676080);
 		owner.setName("Lina Florez");
+		owner.setCellphone(new BigInteger("3007200405"));
+		owner.setAddress("");
+		owner.setPhone(5109965);
 		this.ownerSet.add(owner);
 		
 		return this.ownerSet;
+	}
+	
+	/**
+	 * It keeps a copy from {@link JTPetCityTools}, this copy can be used to do available
+	 * buttons on it.
+	 * 
+	 * @param jtPetCityTools {@link JTPetCityTools} copy.
+	 */
+	public void keepCopyFromPetCityTools(JTPetCityTools jtPetCityTools) {
+		this.jtPetCityTools = jtPetCityTools;
 	}
 	
 	/**
@@ -154,8 +178,20 @@ public class OwnerAndPetsInfoController implements Observer {
 	 * @param owner New owner to be displayed.
 	 */
 	public void changeOwnerInOwnerInfoPanel(Owner owner) {
-		if (this.jpOwnerInfo != null && this.jpOwnerInfo.updateInformation(owner)) {
-			this.changePetCardList(owner.getPetSet());
+		if (this.jpOwnerInfo != null) {
+			int result = JOptionPane.NO_OPTION;
+			if (!this.jpOwnerInfo.getObjectOriginal().equals(this.jpOwnerInfo.getObjectDisplayed())) {
+				result = JOptionPane.showConfirmDialog(null, "¿Desea guardar los datos?", "Algunos datos fueron cambiados", 
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			}
+			if (result != JOptionPane.CANCEL_OPTION) {
+				if (result == JOptionPane.YES_OPTION) {
+					if (this.jpOwnerInfo.updateInformation(owner)) {
+						this.changePetCardList(owner.getPetSet());
+					}
+				}
+				
+			}
 		}
 	}
 	
@@ -184,6 +220,10 @@ public class OwnerAndPetsInfoController implements Observer {
 			this.changeOwnerInOwnerInfoPanel((Owner)arg);
 		} else if (observable instanceof JPPetCardList) {
 			this.changePetInPetInfoPanel((Pet)arg);
+		} else if (observable instanceof JPOwnerInfo) {
+			if (jtPetCityTools != null) {
+				this.jtPetCityTools.makeAvailableSaveAction();
+			}
 		}
 	}
 

@@ -1,7 +1,11 @@
 package co.com.carp.petcity.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.math.BigInteger;
+import java.util.Observable;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -18,12 +22,7 @@ import co.com.carp.petcity.entity.Owner;
  * @author Carlos Rodriguez
  *
  */
-public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
-
-	/**
-	 * Auto-generated serial version
-	 */
-	private static final long serialVersionUID = 1L;
+public class JPOwnerInfo extends Observable implements InformationPanelFillable {
 	
 	/**
 	 * {@link JTextField} that stores owner's name
@@ -61,6 +60,16 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 	private Owner owner;
 	
 	/**
+	 * It controls if some change done in a field component was notified.
+	 */
+	private boolean changeNotified;
+	
+	/**
+	 * {@link JPanel} with owner information.
+	 */
+	private JPanel jpOwnerInfo;
+	
+	/**
 	 * Constructor that receives the owner to displayed on screen. 
 	 * 
 	 * @param owner The owner that will be displayed.
@@ -68,10 +77,16 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 	public JPOwnerInfo(Owner owner) {
 		super();
 		this.owner = owner;
-		this.setLayout(null);
+		this.changeNotified = false;		
+	}
+	
+	public JPanel createOwnerInfoPanel(Dimension dimension) {		
 		Font verdanaBold = new Font("Verdana", Font.BOLD, 12);
 		Font verdanaPlain = new Font("Verdana", Font.PLAIN, 12);
 		
+		this.jpOwnerInfo = new JPanel(null);
+		this.jpOwnerInfo.setPreferredSize(dimension);
+		this.jpOwnerInfo.setBackground(Color.WHITE);
 		JPanel jpnTitle = new JPanel(null);
 		jpnTitle.setBounds(10, 0, 730, 40);
 		jpnTitle.setBackground(new Color(34, 139, 34));
@@ -82,14 +97,15 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 		jlTitle.setForeground(Color.WHITE);
 		jpnTitle.add(jlTitle);
 		
-		this.add(jpnTitle);
-		this.add(this.createInfoPanel(verdanaBold, verdanaPlain));
+		this.jpOwnerInfo.add(jpnTitle);
+		this.jpOwnerInfo.add(this.createInfoPanel(verdanaBold, verdanaPlain));
 		if (owner == null) {
 			this.initializeDisableAllComponents();
 		} else {
 			this.doEnableAllComponents();
 			this.fillFields();
 		}
+		return this.jpOwnerInfo;
 	}
 	
 	@Override
@@ -105,6 +121,7 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 		jtfOwnerId = new JTextField();
 		jtfOwnerId.setBounds(100, 20, 250, 20);
 		jtfOwnerId.setFont(verdanaPlain);
+		jtfOwnerId.addKeyListener(this);
 		jpnOwnerDetail.add(jlbOwnerId);
 		jpnOwnerDetail.add(jtfOwnerId);
 		
@@ -182,6 +199,7 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 	@Override
 	public void initializeDisableAllComponents() {
 		if (owner == null) {
+			this.changeNotified = false;
 			this.jtfOwnerName.setEditable(false);
 			this.jtfOwnerAddress.setEditable(false);
 			this.jtfOwnerPhone.setEditable(false);
@@ -195,6 +213,7 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 	@Override
 	public void doEnableAllComponents() {
 		if (owner != null) {
+			this.changeNotified = false;
 			this.jtfOwnerName.setEditable(true);
 			this.jtfOwnerAddress.setEditable(true);
 			this.jtfOwnerPhone.setEditable(true);
@@ -206,6 +225,7 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 	
 	@Override
 	public void fillFields() {
+		this.changeNotified = false;
 		this.jtfOwnerName.setText(this.owner.getName());
 		this.jtfOwnerAddress.setText(this.owner.getAddress());
 		this.jtfOwnerPhone.setText(this.owner.getPhone() + "");
@@ -216,7 +236,7 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 	
 	@Override
 	public boolean updateInformation(Object owner) {
-		boolean canReplace = false;
+		boolean canReplace = false;		
 		if (!this.owner.equals((Owner)owner)) {
 			this.owner = (Owner)owner;
 			if (owner == null) {
@@ -228,5 +248,42 @@ public class JPOwnerInfo extends JPanel implements InformationPanelFillable {
 			canReplace = true;
 		}
 		return canReplace;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		if (!this.changeNotified) {
+			this.changeNotified = true;
+			setChanged();
+			notifyObservers();
+		}
+	}
+
+	@Override
+	public Object getObjectDisplayed() {
+		Owner ownerCopied = new Owner();
+		ownerCopied.setIdentification(this.owner.getIdentification());
+		ownerCopied.setDocumentId(Integer.parseInt(this.jtfOwnerId.getText()));
+		ownerCopied.setName(this.jtfOwnerName.getText());
+		ownerCopied.setAddress(this.jtfOwnerAddress.getText());
+		ownerCopied.setPhone(Integer.parseInt(this.jtfOwnerPhone.getText()));
+		ownerCopied.setCellphone(new BigInteger(this.jtfOwnerCellphone.getText()));
+		ownerCopied.setEmail(this.jtfOwnerEmail.getText());
+		return ownerCopied;
+	}
+
+	@Override
+	public Object getObjectOriginal() {
+		return this.owner;
 	}
 }

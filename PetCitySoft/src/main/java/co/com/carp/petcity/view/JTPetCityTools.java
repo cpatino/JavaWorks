@@ -24,7 +24,12 @@ public class JTPetCityTools extends JToolBar implements ActionListener {
 	/**
 	 * Identification from tool bar that is been currently used.
 	 */
-	private int idToolBarUsed; 
+	private int idToolBarUsed;
+	
+	/**
+	 * Button that allows save data when some change occurs.
+	 */
+	private JButton jbtSave;
 	
 	/**
 	 * Tool bar used in {@link JFOwnerAndPetsInfo} screens. 
@@ -33,7 +38,7 @@ public class JTPetCityTools extends JToolBar implements ActionListener {
 	
 	public JTPetCityTools(int idToolBar) {
 		if (TOOLBAR_PET_OWNER_INFO == idToolBar) {
-			this.setIdToolBarUsed(idToolBar);
+			this.idToolBarUsed = idToolBar;
 			this.createPetAndOwnerToolBar();
 		}
 	}	
@@ -44,25 +49,45 @@ public class JTPetCityTools extends JToolBar implements ActionListener {
 	public int getIdToolBarUsed() {
 		return idToolBarUsed;
 	}
-
-	/**
-	 * @param idToolBarUsed the idToolBarUsed to set
-	 */
-	public void setIdToolBarUsed(int idToolBarUsed) {
-		this.idToolBarUsed = idToolBarUsed;
+	
+	public void makeAvailableSaveAction() {
+		this.jbtSave.setEnabled(true);
 	}
 
 	/**
 	 * Creates a new pet and owner tool bar, and it enables its buttons to receive the users' interaction. 
 	 */
-	public void createPetAndOwnerToolBar() {
-		JButton jbtNew = new JButton(new ImageIcon(JTPetCityTools.class.getResource("/co/com/carp/petcity/image/add_tb_button.png")));
-		jbtNew.addActionListener(this);
-		this.add(jbtNew);
+	private void createPetAndOwnerToolBar() {
+		this.jbtSave = new JButton(new ImageIcon(JTPetCityTools.class.getResource("/co/com/carp/petcity/image/disk_blue.png")));
+		this.jbtSave.setToolTipText("Guardar");
+		this.jbtSave.setEnabled(false);
+		this.jbtSave.addActionListener(this);
+		this.add(this.jbtSave);
 		this.addSeparator();
-		JButton jbtSave = new JButton(new ImageIcon(JTPetCityTools.class.getResource("/co/com/carp/petcity/image/disk_blue_tb_button.png")));
-		jbtSave.addActionListener(this);
-		this.add(jbtSave);
+		JButton jbtNewOwner = new JButton(new ImageIcon(JTPetCityTools.class.getResource("/co/com/carp/petcity/image/businessman_add.png")));
+		jbtNewOwner.setToolTipText("Nuevo propietario");
+		jbtNewOwner.addActionListener(this);
+		this.add(jbtNewOwner);
+		this.addSeparator();
+		JButton jbtNewPet = new JButton(new ImageIcon(JTPetCityTools.class.getResource("/co/com/carp/petcity/image/dog_add.png")));
+		jbtNewPet.setToolTipText("Agregar mascota");
+		jbtNewPet.addActionListener(this);
+		this.add(jbtNewPet);
+		this.addSeparator();
+		JButton jbtClinicHistory = new JButton(new ImageIcon(JTPetCityTools.class.getResource("/co/com/carp/petcity/image/doctor.png")));
+		jbtClinicHistory.setToolTipText("Ver historia clinica");
+		jbtClinicHistory.addActionListener(this);
+		this.add(jbtClinicHistory);
+		this.addSeparator();
+		JButton jbtNewNote = new JButton(new ImageIcon(JTPetCityTools.class.getResource("/co/com/carp/petcity/image/note_add.png")));
+		jbtNewNote.setToolTipText("Agregar nota");
+		jbtNewNote.addActionListener(this);
+		this.add(jbtNewNote);
+		this.addSeparator();
+		JButton jbtViewNotes = new JButton(new ImageIcon(JTPetCityTools.class.getResource("/co/com/carp/petcity/image/note_view.png")));
+		jbtViewNotes.setToolTipText("Ver notas");
+		jbtViewNotes.addActionListener(this);
+		this.add(jbtViewNotes);
 		this.addSeparator();
 	}
 

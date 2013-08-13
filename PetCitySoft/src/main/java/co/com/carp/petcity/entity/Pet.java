@@ -257,29 +257,141 @@ public class Pet {
 	 */
 	public void setNotificationSet(TreeSet<Notification> notificationSet) {
 		this.notificationSet = notificationSet;
+	}	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((bornDate == null) ? 0 : bornDate.hashCode());
+		result = prime * result
+				+ ((bornPlace == null) ? 0 : bornPlace.hashCode());
+		result = prime * result
+				+ ((clinicHistory == null) ? 0 : clinicHistory.hashCode());
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result
+				+ ((drenching == null) ? 0 : drenching.hashCode());
+		result = prime * result + identification;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((notificationSet == null) ? 0 : notificationSet.hashCode());
+		result = prime * result + ((photo == null) ? 0 : photo.hashCode());
+		result = prime * result
+				+ ((reproduction == null) ? 0 : reproduction.hashCode());
+		result = prime * result + ((sex == null) ? 0 : sex.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result
+				+ ((vaccineSet == null) ? 0 : vaccineSet.hashCode());
+		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
-	public boolean equals(Object arg) {
-		if (arg == null || !(arg instanceof Pet)) {
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
 			return false;
 		}
-		if (!this.name.equals(((Pet)arg).name) ||
-				!this.type.equals(((Pet)arg).type) ||
-				!this.bornDate.equals(((Pet)arg).bornDate) ||
-				!this.bornPlace.equals(((Pet)arg).bornPlace)) {
+		if (!(obj instanceof Pet)) {
+			return false;
+		}
+		Pet other = (Pet) obj;
+		if (bornDate == null) {
+			if (other.bornDate != null) {
+				return false;
+			}
+		} else if (!bornDate.equals(other.bornDate)) {
+			return false;
+		}
+		if (bornPlace == null) {
+			if (other.bornPlace != null) {
+				return false;
+			}
+		} else if (!bornPlace.equals(other.bornPlace)) {
+			return false;
+		}
+		if (clinicHistory == null) {
+			if (other.clinicHistory != null) {
+				return false;
+			}
+		} else if (!clinicHistory.equals(other.clinicHistory)) {
+			return false;
+		}
+		if (color == null) {
+			if (other.color != null) {
+				return false;
+			}
+		} else if (!color.equals(other.color)) {
+			return false;
+		}
+		if (drenching == null) {
+			if (other.drenching != null) {
+				return false;
+			}
+		} else if (!drenching.equals(other.drenching)) {
+			return false;
+		}
+		if (identification != other.identification) {
+			return false;
+		}
+		if (name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		} else if (!name.equals(other.name)) {
+			return false;
+		}
+		if (notificationSet == null) {
+			if (other.notificationSet != null) {
+				return false;
+			}
+		} else if (!notificationSet.equals(other.notificationSet)) {
+			return false;
+		}
+		if (photo == null) {
+			if (other.photo != null) {
+				return false;
+			}
+		} else if (!photo.equals(other.photo)) {
+			return false;
+		}
+		if (reproduction == null) {
+			if (other.reproduction != null) {
+				return false;
+			}
+		} else if (!reproduction.equals(other.reproduction)) {
+			return false;
+		}
+		if (sex == null) {
+			if (other.sex != null) {
+				return false;
+			}
+		} else if (!sex.equals(other.sex)) {
+			return false;
+		}
+		if (type == null) {
+			if (other.type != null) {
+				return false;
+			}
+		} else if (!type.equals(other.type)) {
+			return false;
+		}
+		if (vaccineSet == null) {
+			if (other.vaccineSet != null) {
+				return false;
+			}
+		} else if (!vaccineSet.equals(other.vaccineSet)) {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		int hashCode = 85;
-		hashCode = hashCode * name.hashCode() + type.hashCode()
-				+ bornDate.hashCode() + bornPlace.hashCode();
-		hashCode += ((notificationSet == null) ? 0 : notificationSet.hashCode());
-		return hashCode;
 	}
 
 	/* (non-Javadoc)

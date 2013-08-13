@@ -1,6 +1,7 @@
 package co.com.carp.petcity.view;
 
 import java.awt.Font;
+import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
@@ -13,7 +14,7 @@ import javax.swing.JPanel;
  * @author Carlos Rodriguez
  *
  */
-public interface InformationPanelFillable {
+public interface InformationPanelFillable extends KeyListener{
 	
 	/**
 	 * It creates information panel with all fields required.
@@ -52,5 +53,19 @@ public interface InformationPanelFillable {
 	 * @return True if information can be updated, false otherwise.
 	 */
 	boolean updateInformation(Object object);
+	
+	/**
+	 * Gets a copy from {@link Object} that is being displayed on screen. 
+	 * 
+	 * @return {@link Object} that is being displayed.
+	 */
+	Object getObjectDisplayed();
+	
+	/**
+	 * Gets a copy form {@link Object} originally loaded in screen.
+	 * 
+	 * @return {@link Object} original loaded by screen.
+	 */
+	Object getObjectOriginal();
 
 }

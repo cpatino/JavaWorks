@@ -1,5 +1,6 @@
 package co.com.carp.petcity.entity;
 
+import java.math.BigInteger;
 import java.util.Set;
 
 /**
@@ -18,7 +19,7 @@ public class Owner extends Person implements Comparable<Owner> {
 	/**
 	 * Owner cell-phone
 	 */
-	private int cellphone;
+	private BigInteger cellphone;
 	
 	/**
 	 * Owner phone
@@ -47,14 +48,14 @@ public class Owner extends Person implements Comparable<Owner> {
 	/**
 	 * @return the cellphone
 	 */
-	public int getCellphone() {
+	public BigInteger getCellphone() {
 		return cellphone;
 	}
 
 	/**
 	 * @param cellphone the cellphone to set
 	 */
-	public void setCellphone(int cellphone) {
+	public void setCellphone(BigInteger cellphone) {
 		this.cellphone = cellphone;
 	}
 
@@ -85,7 +86,6 @@ public class Owner extends Person implements Comparable<Owner> {
 	public void setPetSet(Set<Pet> petSet) {
 		this.petSet = petSet;
 	}
-
 	
 
 	/* (non-Javadoc)
@@ -96,7 +96,8 @@ public class Owner extends Person implements Comparable<Owner> {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + cellphone;
+		result = prime * result
+				+ ((cellphone == null) ? 0 : cellphone.hashCode());
 		result = prime * result + phone;
 		return result;
 	}
@@ -106,22 +107,33 @@ public class Owner extends Person implements Comparable<Owner> {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Owner)) {
 			return false;
+		}
 		Owner other = (Owner) obj;
 		if (address == null) {
-			if (other.address != null)
+			if (other.address != null) {
 				return false;
-		} else if (!address.equals(other.address))
+			}
+		} else if (!address.equals(other.address)) {
 			return false;
-		if (cellphone != other.cellphone)
+		}
+		if (cellphone == null) {
+			if (other.cellphone != null) {
+				return false;
+			}
+		} else if (!cellphone.equals(other.cellphone)) {
 			return false;
-		if (phone != other.phone)
+		}
+		if (phone != other.phone) {
 			return false;
+		}
 		return true;
 	}
 
