@@ -50,8 +50,13 @@ public class JTPetCityTools extends JToolBar implements ActionListener {
 		return idToolBarUsed;
 	}
 	
-	public void makeAvailableSaveAction() {
-		this.jbtSave.setEnabled(true);
+	/**
+	 * It'll make enable/disable save action when it needs.
+	 * 
+	 * @param enable True if button must be enabled, false otherwise.
+	 */
+	public void makeEnableSaveAction(boolean enable) {
+		this.jbtSave.setEnabled(enable);
 	}
 
 	/**

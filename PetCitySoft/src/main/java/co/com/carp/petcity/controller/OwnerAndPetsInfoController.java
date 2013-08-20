@@ -3,11 +3,9 @@ package co.com.carp.petcity.controller;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.JFrame;
@@ -88,31 +86,21 @@ public class OwnerAndPetsInfoController implements Observer {
 		pet2.setBornDate(new Date());
 		pet2.setBornPlace("La caracas");
 		
-		PetType type = new PetType();
-		type.setIdentification(1);
-		type.setName("Canino");
+		PetType typeCanino = new PetType();
+		typeCanino.setIdentification(1);
+		typeCanino.setName("Canino");
 		
-		PetType type2 = new PetType();
-		type2.setIdentification(1);
-		type2.setName("Canino");
-		
-		Map<Integer, PetBreed> breedMap = new TreeMap<>();
 		PetBreed breed = new PetBreed();
 		breed.setIdentification(1);
 		breed.setName("Beagle");
-		breedMap.put(breed.getIdentification(), breed);
+		breed.setPetType(typeCanino);
+		pet.setBreed(breed);
 		
 		breed = new PetBreed();
 		breed.setIdentification(2);
 		breed.setName("Cocker");
-		breedMap.put(breed.getIdentification(), breed);
-		
-		type.setBreedMap(breedMap);
-		type.setBreedSelected(1);
-		pet.setType(type);
-		type2.setBreedMap(breedMap);
-		type2.setBreedSelected(2);
-		pet2.setType(type2);
+		breed.setPetType(typeCanino);
+		pet2.setBreed(breed);
 		
 		Set<Pet> petSet = new HashSet<>();
 		petSet.add(pet);
@@ -130,6 +118,44 @@ public class OwnerAndPetsInfoController implements Observer {
 		this.ownerSet.add(owner);
 		
 		return this.ownerSet;
+	}
+	
+	public Set<PetType> queryPetType() {
+		Set<PetType> typeSet = new TreeSet<>();
+		Set<PetBreed> breedSet = new TreeSet<>();
+		
+		PetType typeCanino = new PetType();
+		typeCanino.setIdentification(1);
+		typeCanino.setName("Canino");
+		
+		PetBreed breed = new PetBreed();
+		breed.setIdentification(1);
+		breed.setName("Beagle");
+		breedSet.add(breed);
+		
+		breed = new PetBreed();
+		breed.setIdentification(2);
+		breed.setName("Cocker");
+		breedSet.add(breed);
+		
+		breed = new PetBreed();
+		breed.setIdentification(3);
+		breed.setName("Pitbull");
+		breedSet.add(breed);
+		
+		breed = new PetBreed();
+		breed.setIdentification(4);
+		breed.setName("Chow chow");
+		breedSet.add(breed);
+		
+		typeCanino.setBreedSet(breedSet);
+		typeSet.add(typeCanino);
+		
+		PetType typeFelino = new PetType();
+		typeFelino.setIdentification(2);
+		typeFelino.setName("Felino");
+		typeSet.add(typeFelino);
+		return typeSet;
 	}
 	
 	/**
@@ -222,7 +248,7 @@ public class OwnerAndPetsInfoController implements Observer {
 			this.changePetInPetInfoPanel((Pet)arg);
 		} else if (observable instanceof JPOwnerInfo) {
 			if (jtPetCityTools != null) {
-				this.jtPetCityTools.makeAvailableSaveAction();
+				this.jtPetCityTools.makeEnableSaveAction(true);
 			}
 		}
 	}

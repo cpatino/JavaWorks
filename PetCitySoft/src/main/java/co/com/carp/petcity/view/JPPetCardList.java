@@ -109,7 +109,7 @@ public class JPPetCardList extends Observable implements ActionListener, ObjectC
 		jlbPetName.setFont(verdanaBold);
 		jlbPetName.setBounds(10, 10, 90, 20);
 		jpPetCard.add(jlbPetName);
-		PetBreed breed = pet.getType().getBreedMap().get(pet.getType().getBreedSelected());
+		PetBreed breed = pet.getBreed();
 		JLabel jlbPetBreed = new JLabel(breed.getName());
 		jlbPetBreed.setFont(verdanaBold);
 		jlbPetBreed.setBounds(10, 30, 160, 20);

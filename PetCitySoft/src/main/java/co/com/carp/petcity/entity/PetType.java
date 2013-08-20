@@ -1,13 +1,13 @@
 package co.com.carp.petcity.entity;
 
-import java.util.Map;
+import java.util.Set;
 
 /**
  * This class is attempt to manage pet type 
  * 
  * @author Carlos Rodriguez
  * */
-public class PetType {
+public class PetType implements Comparable<PetType> {
 	
 	/** 
 	 * Pet type identification
@@ -20,14 +20,10 @@ public class PetType {
 	private String name;
 	
 	/**
-	 * A set of breed enabled to pet type
+	 * A set of breed enabled to pet type, It will be only used in combo box to display values enabled 
+	 * when a pet type is selected.
 	 * */
-	private Map<Integer, PetBreed> breedMap;
-	
-	/**
-	 * Current breed by pet
-	 * */
-	private int breedSelected;
+	private Set<PetBreed> breedSet;
 
 	/**
 	 * @return the identification
@@ -62,29 +58,15 @@ public class PetType {
 	/**
 	 * @return the breedSet
 	 */
-	public Map<Integer, PetBreed> getBreedMap() {
-		return breedMap;
+	public Set<PetBreed> getBreedSet() {
+		return breedSet;
 	}
 
 	/**
 	 * @param breedSet the breedSet to set
 	 */
-	public void setBreedMap(Map<Integer, PetBreed> breedMap) {
-		this.breedMap = breedMap;
-	}
-
-	/**
-	 * @return the breedSelected
-	 */
-	public int getBreedSelected() {
-		return breedSelected;
-	}
-
-	/**
-	 * @param breedSelected the breedSelected to set
-	 */
-	public void setBreedSelected(int breedSelected) {
-		this.breedSelected = breedSelected;
+	public void setBreedSet(Set<PetBreed> breedSet) {
+		this.breedSet = breedSet;
 	}
 	
 	@Override
@@ -97,12 +79,19 @@ public class PetType {
 		}
 		return true;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "PetType={identification:" + this.identification + ";name:" + this.name + 
-				";breedSet:" + this.getBreedMap().toString() + ";breedSelected:" + this.breedSelected +
-				"}";
+		return "PetType [identification=" + identification + ", name=" + name
+				+ ", breedMap=" + breedSet + "]";
+	}
+
+	@Override
+	public int compareTo(PetType otherPetType) {
+		return this.name.compareToIgnoreCase(otherPetType.name);
 	}
 
 }

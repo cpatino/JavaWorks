@@ -5,7 +5,7 @@ package co.com.carp.petcity.entity;
  * 
  * @author Carlos Rodriguez
  * */
-public class PetBreed {
+public class PetBreed implements Comparable<PetBreed> {
 	
 	/** 
 	 * Breed identification
@@ -16,6 +16,11 @@ public class PetBreed {
 	 * Breed name
 	 * */
 	private String name;
+	
+	/**
+	 * Pet type from pet breed.
+	 */
+	private PetType petType;
 	
 	/**
 	 * @return breed identification	 * 
@@ -45,6 +50,20 @@ public class PetBreed {
 		this.name = name;
 	}
 
+	/**
+	 * @return the petType
+	 */
+	public PetType getPetType() {
+		return petType;
+	}
+
+	/**
+	 * @param petType the petType to set
+	 */
+	public void setPetType(PetType petType) {
+		this.petType = petType;
+	}
+
 	@Override
 	public boolean equals(Object arg) {
 		if (arg == null || !(arg instanceof PetBreed)) {
@@ -66,6 +85,11 @@ public class PetBreed {
 	@Override
 	public String toString() {
 		return "Breed={identification:" + this.identification + ";name:" + this.name + "}";
+	}
+
+	@Override
+	public int compareTo(PetBreed otherBreed) {
+		return this.name.compareToIgnoreCase(otherBreed.name);
 	}
 
 }

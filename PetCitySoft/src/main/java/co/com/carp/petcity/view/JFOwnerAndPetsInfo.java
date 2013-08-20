@@ -69,7 +69,7 @@ public class JFOwnerAndPetsInfo extends JFrame {
 				BorderLayout.NORTH);
 		//Pet info
 		Pet pet = (Pet) owner.getPetSet().toArray()[0];
-		JPPetInfo jpPetInfo = new JPPetInfo(pet);
+		JPPetInfo jpPetInfo = new JPPetInfo(pet, this.controller.queryPetType());
 		jpPetInfo.setPreferredSize(new Dimension((int)screenSize.getWidth() - 260, (int) screenSize.getHeight() - 600));
 		jpPetInfo.setBackground(Color.WHITE);
 		jpnCentral.add(jpPetInfo, BorderLayout.CENTER);

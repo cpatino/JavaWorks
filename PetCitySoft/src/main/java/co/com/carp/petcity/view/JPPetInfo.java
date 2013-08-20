@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -24,6 +25,7 @@ import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilCalendarModel;
 import co.com.carp.petcity.entity.Pet;
+import co.com.carp.petcity.entity.PetBreed;
 import co.com.carp.petcity.entity.PetType;
 
 /**
@@ -43,6 +45,12 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 	 * {@link Pet} actually been displayed on screen.
 	 */
 	private Pet pet;
+	
+	/**
+	 * {@link Set} of {@link PetType}s that will be displayed on {@link JComboBox}, it also contains information
+	 * about {@link PetBreed}s that will be displayed according {@link PetType} selected.
+	 */
+	private Set<PetType> typeSet; 
 
 	/**
 	 * {@link JTextField} that stores pet's name
@@ -84,10 +92,12 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 	 * Constructor
 	 * 
 	 * @param pet {@link Pet} to displayed in screen.
+	 * @param typeSet {@link Set} of {@link PetType}s that will be displayed.
 	 */
-	public JPPetInfo(Pet pet) {
+	public JPPetInfo(Pet pet, Set<PetType> typeSet) {
 		super();
 		this.pet = pet;
+		this.typeSet = typeSet;
 		this.setLayout(null);
 		Font verdanaBold = new Font("Verdana", Font.BOLD, 12);
 		Font verdanaPlain = new Font("Verdana", Font.PLAIN, 12);
@@ -161,10 +171,63 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 
 		return jpnPetImageActions;
 	}
+	
+	/**
+	 * Builds a {@link String} array that will be used on {@link PetType}'s 
+	 * {@link JComboBox}  to display data.
+	 * 
+	 * @return {@link String} array with data to be displayed.
+	 */
+	private String[] buildPetTypeStringArray() {
+		String[] typeArray = new String[this.typeSet.size() + 1];
+		typeArray[0] = "Seleccione uno...";
+		int arrayPos = 1;
+		for(PetType type : typeSet) {
+			typeArray[arrayPos] = type.getName();
+			arrayPos++;
+		}
+		return typeArray;
+	}
+	
+	/**
+	 * Builds a {@link String} array that will be used on {@link PetBreed}'s 
+	 * {@link JComboBox}  to display data.
+	 * 
+	 * @return {@link String} array with data to be displayed.
+	 */
+	private String[] buildPetBreedStringArray() {
+		String[] breedArray = null;
+		if (jcbPetType.getSelectedIndex() == 0) {
+			breedArray = new String[] { "Seleccione uno..." };
+		} else {
+			for (PetType type : typeSet) {
+				if (type.getName().equalsIgnoreCase(jcbPetType.getSelectedItem().toString())) {
+					if (type.getBreedSet() != null) {
+						breedArray = new String[type.getBreedSet().size() + 1];
+						breedArray[0] = "Seleccione uno...";
+						int arrayPos = 1;
+						for (PetBreed breed : type.getBreedSet()) {
+							breedArray[arrayPos] = breed.getName();
+							arrayPos++;
+						}
+					} else {
+						breedArray = new String[] { "Seleccione uno..." };
+					}
+				}
+			}
+		}
+		return breedArray;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-
+		if (event.getSource().equals(jcbPetType)) {
+			this.jcbBreed.removeAllItems();
+			String[] breedArray = this.buildPetBreedStringArray();
+			for (String strBreed : breedArray) {
+				this.jcbBreed.addItem(strBreed);
+			}
+		}
 	}
 
 	@Override
@@ -188,7 +251,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		jlbPetKind.setBounds(10, 40, 145, 20);
 		jlbPetKind.setFont(verdanaBold);
 		jlbPetKind.setHorizontalAlignment(SwingConstants.RIGHT);
-		jcbPetType = new JComboBox<String>(new String[] { "Seleccione uno..." });
+		jcbPetType = new JComboBox<String>(this.buildPetTypeStringArray());
 		jcbPetType.setBounds(160, 40, 200, 20);
 		jcbPetType.setFont(verdanaPlain);
 		jcbPetType.addActionListener(this);
@@ -199,7 +262,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		jlbPetBreed.setBounds(10, 70, 145, 20);
 		jlbPetBreed.setFont(verdanaBold);
 		jlbPetBreed.setHorizontalAlignment(SwingConstants.RIGHT);
-		jcbBreed = new JComboBox<String>(new String[] { "Seleccione uno..." });
+		jcbBreed = new JComboBox<String>(this.buildPetBreedStringArray());
 		jcbBreed.setBounds(160, 70, 200, 20);
 		jcbBreed.setFont(verdanaPlain);
 		jpnGeneralDetail.add(jlbPetBreed);

@@ -23,9 +23,9 @@ public class Pet {
 	private String name;
 	
 	/**
-	 * Pet's type
+	 * Pet's breed
 	 */
-	private PetType type;
+	private PetBreed breed;
 	
 	/**
 	 * Pet's color
@@ -106,17 +106,17 @@ public class Pet {
 	}
 
 	/**
-	 * @return the type
+	 * @return the petBreed
 	 */
-	public PetType getType() {
-		return type;
+	public PetBreed getBreed() {
+		return breed;
 	}
 
 	/**
-	 * @param type the type to set
+	 * @param petBreed the petBreed to set
 	 */
-	public void setType(PetType type) {
-		this.type = type;
+	public void setBreed(PetBreed petBreed) {
+		this.breed = petBreed;
 	}
 
 	/**
@@ -283,7 +283,7 @@ public class Pet {
 		result = prime * result
 				+ ((reproduction == null) ? 0 : reproduction.hashCode());
 		result = prime * result + ((sex == null) ? 0 : sex.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((breed == null) ? 0 : breed.hashCode());
 		result = prime * result
 				+ ((vaccineSet == null) ? 0 : vaccineSet.hashCode());
 		return result;
@@ -377,11 +377,11 @@ public class Pet {
 		} else if (!sex.equals(other.sex)) {
 			return false;
 		}
-		if (type == null) {
-			if (other.type != null) {
+		if (breed == null) {
+			if (other.breed != null) {
 				return false;
 			}
-		} else if (!type.equals(other.type)) {
+		} else if (!breed.equals(other.breed)) {
 			return false;
 		}
 		if (vaccineSet == null) {
@@ -400,7 +400,7 @@ public class Pet {
 	@Override
 	public String toString() {
 		return "Pet [identification=" + identification + ", name=" + name
-				+ ", type=" + type + ", color=" + color + ", sex=" + sex
+				+ ", breed=" + breed + ", color=" + color + ", sex=" + sex
 				+ ", bornDate=" + bornDate + ", bornPlace=" + bornPlace
 				+ ", drenching=" + drenching + ", reproduction=" + reproduction
 				+ ", photo=" + photo + ", vaccineSet=" + vaccineSet
