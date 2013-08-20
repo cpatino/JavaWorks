@@ -13,6 +13,16 @@ import java.util.TreeSet;
 public class Pet {
 	
 	/**
+	 * It indicates that pet is a male.
+	 */
+	public static final String PET_SEX_MALE = "Macho";
+	
+	/**
+	 * It indicates that pet is a female.
+	 */
+	public static final String PET_SEX_FEMALE = "Hembra";
+	
+	/**
 	 * Pet's identification
 	 */
 	private int identification;

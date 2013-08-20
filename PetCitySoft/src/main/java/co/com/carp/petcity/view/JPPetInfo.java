@@ -7,13 +7,16 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -273,7 +276,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		jlbPetSex.setFont(verdanaBold);
 		jlbPetSex.setHorizontalAlignment(SwingConstants.RIGHT);
 		jcbSex = new JComboBox<String>(new String[] { "Seleccione uno...",
-				"Macho", "Hembra" });
+				Pet.PET_SEX_FEMALE, Pet.PET_SEX_MALE });
 		jcbSex.setBounds(160, 100, 130, 20);
 		jcbSex.setFont(verdanaPlain);
 		jpnGeneralDetail.add(jlbPetSex);
@@ -323,41 +326,77 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 	@Override
 	public void cleanAllFields() {
 		this.jtfName.setText("");
+		this.jcbPetType.setSelectedIndex(0);
+		this.jcbBreed.setSelectedIndex(0);
+		this.jcbSex.setSelectedIndex(0);
+		this.jtfColor.setText("");
+		this.jtfSource.setText("");
+		this.jdcBornDate.getModel().setValue(null);
 	}
 
 	@Override
 	public void initializeDisableAllComponents() {
-		if (this.pet == null) {
-			this.jtfName.setEnabled(false);
-		}
+		this.jtfName.setEnabled(false);
+		this.jcbPetType.setEnabled(false);
+		this.jcbBreed.setEnabled(false);
+		this.jcbSex.setEnabled(false);
+		this.jtfColor.setEnabled(false);
+		this.jtfSource.setEnabled(false);
+		this.jdcBornDate.setEnabled(false);
+		((JButton)jdcBornDate.getComponent(1)).setEnabled(false);
+		this.cleanAllFields();
 	}
 
 	@Override
 	public void doEnableAllComponents() {
 		if (this.pet != null) {
 			this.jtfName.setEnabled(true);
+			this.jcbPetType.setEnabled(true);
+			this.jcbBreed.setEnabled(true);
+			this.jcbSex.setEnabled(true);
+			this.jtfColor.setEnabled(true);
+			this.jtfSource.setEnabled(true);
+			this.jdcBornDate.setEnabled(true);
+			((JButton)jdcBornDate.getComponent(1)).setEnabled(true);
+			this.fillFields();
 		}
 	}
 
 	@Override
 	public void fillFields() {
 		this.jtfName.setText(pet.getName());
+		this.jcbPetType.setSelectedItem(pet.getBreed().getPetType().getName());
+		this.jcbBreed.setSelectedItem(pet.getBreed().getName());
+		this.jcbSex.setSelectedItem(pet.getSex());
+		this.jtfColor.setText(pet.getColor());
+		this.jtfSource.setText(pet.getBornPlace());
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(pet.getBornDate());
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		this.jdcBornDate.getModel().setDate(year, month, day);
+		this.jdcBornDate.getModel().setSelected(true);
+		try {
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			((JFormattedTextField)this.jdcBornDate.getComponent(0)).setText(format.format(pet.getBornDate()));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public boolean updateInformation(Object pet) {
-		boolean canReplace = false;
-		if (!this.pet.equals((Pet)pet)) {
-			this.pet = (Pet)pet;
-			if (pet == null) {
-				this.initializeDisableAllComponents();
-			} else {
+		if (pet != null) {
+			if (this.pet == null || !this.pet.equals((Pet)pet)) {
+				this.pet = (Pet)pet;
 				this.doEnableAllComponents();
-				this.fillFields();
 			}
-			canReplace = true;
+		} else {
+			this.pet = null;
+			this.cleanAllFields();
 		}
-		return canReplace;
+		return true;
 	}
 
 	@Override

@@ -1,7 +1,8 @@
 package co.com.carp.petcity.controller;
 
 import java.math.BigInteger;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
@@ -74,16 +75,31 @@ public class OwnerAndPetsInfoController implements Observer {
 		owner.setAddress("");
 		owner.setPhone(5109965);
 		
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		Pet pet = new Pet();
 		pet.setIdentification(1);
 		pet.setName("Rita");
-		pet.setBornDate(new Date());
+		pet.setSex(Pet.PET_SEX_FEMALE);
+		pet.setColor("Limon");
+		try {
+			pet.setBornDate(format.parse("06/05/2013"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		pet.setBornPlace("La caracas");
 		
 		Pet pet2 = new Pet();
 		pet2.setIdentification(2);
 		pet2.setName("Mia");
-		pet2.setBornDate(new Date());
+		pet2.setSex(Pet.PET_SEX_FEMALE);
+		pet2.setColor("Dorado");
+		try {
+			pet2.setBornDate(format.parse("13/05/2013"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		pet2.setBornPlace("La caracas");
 		
 		PetType typeCanino = new PetType();
@@ -212,9 +228,15 @@ public class OwnerAndPetsInfoController implements Observer {
 			}
 			if (result != JOptionPane.CANCEL_OPTION) {
 				if (result == JOptionPane.YES_OPTION) {
-					if (this.jpOwnerInfo.updateInformation(owner)) {
-						this.changePetCardList(owner.getPetSet());
+					
+				}
+				if (this.jpOwnerInfo.updateInformation(owner)) {
+					Pet pet = null;
+					if (owner.getPetSet() != null) {
+						pet = (Pet) owner.getPetSet().toArray()[0];
 					}
+					changePetInPetInfoPanel(pet);
+					this.changePetCardList(owner.getPetSet());
 				}
 				
 			}
@@ -227,7 +249,8 @@ public class OwnerAndPetsInfoController implements Observer {
 	 * @param pet New pet to be displayed.
 	 */
 	public void changePetInPetInfoPanel(Pet pet) {
-		if (this.jpPetInfo != null && this.jpPetInfo.updateInformation(pet)) {
+		if (this.jpPetInfo != null) {
+			this.jpPetInfo.updateInformation(pet);
 		}
 	}
 	
