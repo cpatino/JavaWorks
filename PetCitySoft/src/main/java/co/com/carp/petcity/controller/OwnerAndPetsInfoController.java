@@ -22,6 +22,7 @@ import co.com.carp.petcity.view.JPOwnerInfo;
 import co.com.carp.petcity.view.JPPetCardList;
 import co.com.carp.petcity.view.JPPetInfo;
 import co.com.carp.petcity.view.JTPetCityTools;
+import static co.com.carp.petcity.view.JTPetCityTools.*;
 
 /**
  * This class is attempt to control all communication between panels done on
@@ -131,6 +132,7 @@ public class OwnerAndPetsInfoController implements Observer {
 		owner.setCellphone(new BigInteger("3007200405"));
 		owner.setAddress("");
 		owner.setPhone(5109965);
+		
 		this.ownerSet.add(owner);
 		
 		return this.ownerSet;
@@ -147,21 +149,25 @@ public class OwnerAndPetsInfoController implements Observer {
 		PetBreed breed = new PetBreed();
 		breed.setIdentification(1);
 		breed.setName("Beagle");
+		breed.setPetType(typeCanino);
 		breedSet.add(breed);
 		
 		breed = new PetBreed();
 		breed.setIdentification(2);
 		breed.setName("Cocker");
+		breed.setPetType(typeCanino);
 		breedSet.add(breed);
 		
 		breed = new PetBreed();
 		breed.setIdentification(3);
 		breed.setName("Pitbull");
+		breed.setPetType(typeCanino);
 		breedSet.add(breed);
 		
 		breed = new PetBreed();
 		breed.setIdentification(4);
 		breed.setName("Chow chow");
+		breed.setPetType(typeCanino);
 		breedSet.add(breed);
 		
 		typeCanino.setBreedSet(breedSet);
@@ -215,43 +221,77 @@ public class OwnerAndPetsInfoController implements Observer {
 	}
 
 	/**
-	 * It tries to replace the information being displayed on owner info panel.
+	 * It tries to replace the information being displayed on {@link JPOwnerInfo} panel.
 	 * 
-	 * @param owner New owner to be displayed.
+	 * @param owner {@link Owner} to be displayed.
 	 */
 	public void changeOwnerInOwnerInfoPanel(Owner owner) {
-		if (this.jpOwnerInfo != null) {
-			int result = JOptionPane.NO_OPTION;
-			if (!this.jpOwnerInfo.getObjectOriginal().equals(this.jpOwnerInfo.getObjectDisplayed())) {
-				result = JOptionPane.showConfirmDialog(null, "¿Desea guardar los datos?", "Algunos datos fueron cambiados", 
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		Owner originalOwner = (Owner)this.jpOwnerInfo.getObjectOriginal();
+		Owner displayedOwner = (Owner)this.jpOwnerInfo.getObjectDisplayed();
+		Pet originalPet = (Pet)this.jpPetInfo.getObjectOriginal();
+		Pet displayedPet = (Pet)this.jpPetInfo.getObjectDisplayed();
+		if ((owner == null || originalOwner == null)
+				|| (owner.getIdentification() != originalOwner.getIdentification())) {
+			int result = JOptionPane.NO_OPTION;			
+			if ((this.jpOwnerInfo.isChangeNotified() && !originalOwner.equals(displayedOwner))
+					|| (this.jpPetInfo.isChangeNotified() && !originalPet.equals(displayedPet))) {
+				result = JOptionPane.showConfirmDialog(null, "¿Desea guardar los datos?",
+						"Algunos datos fueron cambiados", JOptionPane.YES_NO_CANCEL_OPTION,
+						JOptionPane.QUESTION_MESSAGE);
 			}
 			if (result != JOptionPane.CANCEL_OPTION) {
-				if (result == JOptionPane.YES_OPTION) {
-					
+				if (result == JOptionPane.YES_OPTION) {					
+					//TODO: Make save action here. 
 				}
-				if (this.jpOwnerInfo.updateInformation(owner)) {
-					Pet pet = null;
-					if (owner.getPetSet() != null) {
-						pet = (Pet) owner.getPetSet().toArray()[0];
-					}
-					changePetInPetInfoPanel(pet);
-					this.changePetCardList(owner.getPetSet());
+				this.jpOwnerInfo.updateInformation(owner);
+				Pet pet = null;
+				if (owner.getPetSet() != null) {
+					pet = (Pet) owner.getPetSet().toArray()[0];
 				}
-				
+				this.changePetInPetInfoPanel(pet, false);
+				this.changePetCardList(owner.getPetSet());
+				this.jtPetCityTools.makeEnableSaveAction(false);
 			}
 		}
 	}
 	
 	/**
-	 * It tries to replace the information being displayed on pet info panel.
+	 * It tries to replace the information being displayed on {@link JPPetInfo} panel.
 	 * 
-	 * @param pet New pet to be displayed.
+	 * @param pet {@link Pet} to be displayed.
 	 */
 	public void changePetInPetInfoPanel(Pet pet) {
-		if (this.jpPetInfo != null) {
-			this.jpPetInfo.updateInformation(pet);
+		this.changePetInPetInfoPanel(pet, true);		
+	}
+	/**
+	 *  It tries to replace the information being displayed on {@link JPPetInfo} panel, 
+	 *  if it's necessary, it will display a message to ask for user's confirmation in 
+	 *  order to save data changed.
+	 * 
+	 * @param pet {@link Pet} to be displayed.
+	 * @param showMessage True if it will display validation message, false otherwise.
+	 */
+	private void changePetInPetInfoPanel(Pet pet, boolean showMessage) {
+		Pet originalPet = (Pet)this.jpPetInfo.getObjectOriginal();
+		Pet displayedPet = (Pet)this.jpPetInfo.getObjectDisplayed();
+		if ((pet == null || originalPet == null)
+				|| (pet.getIdentification() != originalPet.getIdentification())) {
+			int result = JOptionPane.NO_OPTION;
+			if (showMessage && this.jpPetInfo.isChangeNotified() && !originalPet.equals(
+					displayedPet)) {
+				result = JOptionPane.showConfirmDialog(null, "¿Desea guardar los datos?", 
+						"Algunos datos fueron cambiados", JOptionPane.YES_NO_CANCEL_OPTION, 
+						JOptionPane.QUESTION_MESSAGE);
+			}
+			if (result != JOptionPane.CANCEL_OPTION) {
+				if (result == JOptionPane.YES_OPTION) {
+					//TODO: Make save action here.
+				}
+				this.jpPetInfo.updateInformation(pet);
+				this.jtPetCityTools.makeEnableSaveAction(false);
+			}
 		}
+		this.jtPetCityTools.makeEnableActionsForPet(pet != null ? true : false);
 	}
 	
 	/**
@@ -263,6 +303,36 @@ public class OwnerAndPetsInfoController implements Observer {
 		this.jpPetCard.updateCards(petSet);
 	}
 	
+	/**
+	 * It allow execute an action after receive notification from {@link JTPetCityTools}.
+	 * 
+	 * @param action {@link String} with action to be executed.
+	 */
+	private void executeToolBarAction(String action) {
+		switch (action) {
+		case TOOLBAR_OWNER_PET_INFO_ACTION_SAVE:
+			
+			break;
+		case TOOLBAR_OWNER_PET_INFO_ACTION_OWNER:
+			
+			break;
+		case TOOLBAR_OWNER_PET_INFO_ACTION_PET:
+			
+			break;
+		case TOOLBAR_OWNER_PET_INFO_ACTION_HISTORY:
+			
+			break;
+		case TOOLBAR_OWNER_PET_INFO_ACTION_NEW_NOTE:
+			
+			break;
+		case TOOLBAR_OWNER_PET_INFO_ACTION_VIEW_NOTES:
+			
+			break;
+		default:
+			break;
+		}
+	}
+	
 	@Override
 	public void update(Observable observable, Object arg) {
 		if (observable instanceof JPOwnerCardList) {
@@ -270,9 +340,11 @@ public class OwnerAndPetsInfoController implements Observer {
 		} else if (observable instanceof JPPetCardList) {
 			this.changePetInPetInfoPanel((Pet)arg);
 		} else if (observable instanceof JPOwnerInfo) {
-			if (jtPetCityTools != null) {
-				this.jtPetCityTools.makeEnableSaveAction(true);
-			}
+			this.jtPetCityTools.makeEnableSaveAction(true);
+		} else if (observable instanceof JPPetInfo) {
+			this.jtPetCityTools.makeEnableSaveAction(true);
+		} else if (observable instanceof JTPetCityTools) {
+			this.executeToolBarAction((String)arg);
 		}
 	}
 

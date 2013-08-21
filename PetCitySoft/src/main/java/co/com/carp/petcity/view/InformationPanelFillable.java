@@ -52,7 +52,7 @@ public interface InformationPanelFillable extends KeyListener{
 	 * @param object {@link Object} with new information to be displayed.
 	 * @return True if information can be updated, false otherwise.
 	 */
-	boolean updateInformation(Object object);
+	void updateInformation(Object object);
 	
 	/**
 	 * Gets a copy from {@link Object} that is being displayed on screen. 

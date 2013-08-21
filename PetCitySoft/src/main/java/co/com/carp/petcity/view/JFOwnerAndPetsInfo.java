@@ -28,13 +28,7 @@ public class JFOwnerAndPetsInfo extends JFrame {
 	/**
 	 * Default serial version.
 	 */
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * Screen controller that enables communication between different panels
-	 * that compose screen.
-	 */
-	private OwnerAndPetsInfoController controller;
+	private static final long serialVersionUID = 18592375823861L;
 	
 	/**
 	 * Constructor.
@@ -46,15 +40,15 @@ public class JFOwnerAndPetsInfo extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		//Initialize controller
-		this.controller = new OwnerAndPetsInfoController();
+		OwnerAndPetsInfoController controller = new OwnerAndPetsInfoController();
 		//Get data to display in screen
-		Set<Owner> ownerSet = this.controller.queryOwnerInfo("");
+		Set<Owner> ownerSet = controller.queryOwnerInfo("");
 		//Create screen components		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setBounds(0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight() - 40);
 		//Owner list to do searches
 		JPOwnerCardList jpOwnerCardList = new JPOwnerCardList();
-		jpOwnerCardList.addObserver(this.controller);
+		jpOwnerCardList.addObserver(controller);
 		//Central Panel (Owner and Pet info)
 		JPanel jpnCentral = new JPanel(new BorderLayout());
 		jpnCentral.setSize((int)screenSize.getWidth() - 260, (int) screenSize.getHeight() - 80);
@@ -63,29 +57,32 @@ public class JFOwnerAndPetsInfo extends JFrame {
 		//Owner info		
 		Owner owner = ownerSet.size() > 0 ? (Owner) ownerSet.toArray()[0] : null;
 		JPOwnerInfo jpnOwnerInfo = new JPOwnerInfo(owner);
-		jpnOwnerInfo.addObserver(this.controller);
+		jpnOwnerInfo.addObserver(controller);
 		jpnCentral.add(jpnOwnerInfo.createOwnerInfoPanel(
 				new Dimension((int)screenSize.getWidth() - 260, (int) screenSize.getHeight() - 580)), 
 				BorderLayout.NORTH);
 		//Pet info
 		Pet pet = (Pet) owner.getPetSet().toArray()[0];
-		JPPetInfo jpPetInfo = new JPPetInfo(pet, this.controller.queryPetType());
+		JPPetInfo jpPetInfoObject = new JPPetInfo(pet, controller.queryPetType());
+		JPanel jpPetInfo = jpPetInfoObject.createPetInfoPanel();
 		jpPetInfo.setPreferredSize(new Dimension((int)screenSize.getWidth() - 260, (int) screenSize.getHeight() - 600));
 		jpPetInfo.setBackground(Color.WHITE);
+		jpPetInfoObject.addObserver(controller);
 		jpnCentral.add(jpPetInfo, BorderLayout.CENTER);
-		this.controller.keepCopyFromPetInfoPanel(jpPetInfo);
+		controller.keepCopyFromPetInfoPanel(jpPetInfoObject);
 		//Pet card list
 		JPPetCardList jpPetCardList = new JPPetCardList();
-		jpPetCardList.addObserver(this.controller);
+		jpPetCardList.addObserver(controller);
 		jpnCentral.add(jpPetCardList.createSearchAndListSection(owner.getPetSet(), (int)screenSize.getWidth() - 260), BorderLayout.SOUTH);
-		this.controller.keepCopyFromPetCardPanel(jpPetCardList);
+		controller.keepCopyFromPetCardPanel(jpPetCardList);
 		//Add objects to frame
-		JTPetCityTools jtPetCityTools = new JTPetCityTools(JTPetCityTools.TOOLBAR_PET_OWNER_INFO);
-		this.controller.keepCopyFromPetCityTools(jtPetCityTools);
-		this.add(jtPetCityTools, BorderLayout.NORTH);
+		JTPetCityTools jtPetCityTools = new JTPetCityTools(JTPetCityTools.TOOLBAR_OWNER_PET_INFO);
+		jtPetCityTools.addObserver(controller);
+		controller.keepCopyFromPetCityTools(jtPetCityTools);
+		this.add(jtPetCityTools.createJToolBar(), BorderLayout.NORTH);
 		this.add(jpnCentral, BorderLayout.CENTER);
 		this.add(jpOwnerCardList.createSearchAndListSection(ownerSet, (int) screenSize.getHeight() - 80), BorderLayout.WEST);
-		this.controller.keepCopyFromOwnerInfoPanel(jpnOwnerInfo);		
+		controller.keepCopyFromOwnerInfoPanel(jpnOwnerInfo);		
 	}
 	
 	/**

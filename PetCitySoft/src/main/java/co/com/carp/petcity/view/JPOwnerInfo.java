@@ -80,6 +80,20 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 		this.changeNotified = false;		
 	}
 	
+	/**
+	 * @return the changeNotified
+	 */
+	public boolean isChangeNotified() {
+		return changeNotified;
+	}
+
+	/**
+	 * Creates a new owner information panel (Main panel). 
+	 * 
+	 * @param dimension {@link Dimension} used to draw the panel.
+	 * 
+	 * @return {@link JPanel} to display all information.
+	 */
 	public JPanel createOwnerInfoPanel(Dimension dimension) {		
 		Font verdanaBold = new Font("Verdana", Font.BOLD, 12);
 		Font verdanaPlain = new Font("Verdana", Font.PLAIN, 12);
@@ -131,6 +145,7 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 		jtfOwnerName = new JTextField();
 		jtfOwnerName.setBounds(100, 50, 250, 20);
 		jtfOwnerName.setFont(verdanaPlain);
+		jtfOwnerName.addKeyListener(this);
 		jpnOwnerDetail.add(jlbOwnerName);
 		jpnOwnerDetail.add(jtfOwnerName);		
 		
@@ -140,6 +155,7 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 		jtfOwnerAddress = new JTextField();
 		jtfOwnerAddress.setBounds(100, 80, 250, 20);
 		jtfOwnerAddress.setFont(verdanaPlain);
+		jtfOwnerAddress.addKeyListener(this);
 		JLabel jlbOwnerAddressIcon = new JLabel(new ImageIcon(JPOwnerInfo.class.getResource("/co/com/carp/petcity/image/home.png")));
 		jlbOwnerAddressIcon.setBounds(360, 80, 24, 24);
 		jpnOwnerDetail.add(jlbOwnerAddress);
@@ -152,6 +168,7 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 		jtfOwnerPhone = new JTextField();
 		jtfOwnerPhone.setBounds(450, 20, 150, 20);
 		jtfOwnerPhone.setFont(verdanaPlain);
+		jtfOwnerPhone.addKeyListener(this);
 		JLabel jlbOwnerPhoneIcon = new JLabel(new ImageIcon(JPOwnerInfo.class.getResource("/co/com/carp/petcity/image/telephone.png")));
 		jlbOwnerPhoneIcon.setBounds(610, 20, 24, 24);
 		jpnOwnerDetail.add(jlbOwnerPhone);
@@ -165,6 +182,7 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 		jtfOwnerCellphone = new JTextField();
 		jtfOwnerCellphone.setBounds(450, 50, 150, 20);
 		jtfOwnerCellphone.setFont(verdanaPlain);
+		jtfOwnerCellphone.addKeyListener(this);
 		JLabel jlbOwnerCellphoneIcon = new JLabel(new ImageIcon(JPOwnerInfo.class.getResource("/co/com/carp/petcity/image/cellphone.png")));
 		jlbOwnerCellphoneIcon.setBounds(610, 50, 24, 24);
 		jpnOwnerDetail.add(jlbOwnerCellphone);
@@ -177,6 +195,7 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 		jtfOwnerEmail = new JTextField();
 		jtfOwnerEmail.setBounds(100, 110, 300, 20);
 		jtfOwnerEmail.setFont(verdanaPlain);
+		jtfOwnerEmail.addKeyListener(this);
 		JLabel jlbOwnerEmailIcon = new JLabel(new ImageIcon(JPOwnerInfo.class.getResource("/co/com/carp/petcity/image/at.png")));
 		jlbOwnerEmailIcon.setBounds(410, 110, 24, 24);
 		jpnOwnerDetail.add(jlbOwnerEmail);
@@ -194,12 +213,12 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 		this.jtfOwnerCellphone.setText("0");
 		this.jtfOwnerEmail.setText("");
 		this.jtfOwnerId.setText("");
+		this.changeNotified = false;
 	}
 	
 	@Override
 	public void initializeDisableAllComponents() {
-		if (owner == null) {
-			this.changeNotified = false;
+		if (owner == null) {			
 			this.jtfOwnerName.setEditable(false);
 			this.jtfOwnerAddress.setEditable(false);
 			this.jtfOwnerPhone.setEditable(false);
@@ -213,30 +232,29 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 	@Override
 	public void doEnableAllComponents() {
 		if (owner != null) {
-			this.changeNotified = false;
 			this.jtfOwnerName.setEditable(true);
 			this.jtfOwnerAddress.setEditable(true);
 			this.jtfOwnerPhone.setEditable(true);
 			this.jtfOwnerCellphone.setEditable(true);
 			this.jtfOwnerEmail.setEditable(true);
-			this.jtfOwnerId.setEditable(true);			
+			this.jtfOwnerId.setEditable(true);
+			this.changeNotified = false;
 		}
 	}
 	
 	@Override
 	public void fillFields() {
-		this.changeNotified = false;
 		this.jtfOwnerName.setText(this.owner.getName());
 		this.jtfOwnerAddress.setText(this.owner.getAddress());
 		this.jtfOwnerPhone.setText(this.owner.getPhone() + "");
 		this.jtfOwnerCellphone.setText(this.owner.getCellphone() + "");
 		this.jtfOwnerEmail.setText(this.owner.getEmail());
 		this.jtfOwnerId.setText(this.owner.getDocumentId() + "");
+		this.changeNotified = false;
 	}
 	
 	@Override
-	public boolean updateInformation(Object owner) {
-		boolean canReplace = false;		
+	public void updateInformation(Object owner) {
 		if (!this.owner.equals((Owner)owner)) {
 			this.owner = (Owner)owner;
 			if (owner == null) {
@@ -245,9 +263,7 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 				this.doEnableAllComponents();
 				this.fillFields();
 			}
-			canReplace = true;
 		}
-		return canReplace;
 	}
 
 	@Override

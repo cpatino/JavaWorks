@@ -7,9 +7,11 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Observable;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -37,7 +39,7 @@ import co.com.carp.petcity.entity.PetType;
  * @author Carlos Rodriguez
  *
  */
-public class JPPetInfo extends JPanel implements ActionListener, InformationPanelFillable {
+public class JPPetInfo extends Observable implements ActionListener, InformationPanelFillable, Serializable {
 
 	/**
 	 * Auto-generated serial version
@@ -90,6 +92,11 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 	 * {@link JTextField} that allows store place where pet was obtained.
 	 */
 	private JTextField jtfSource;
+	
+	/**
+	 * It controls if some change was done in a field component was notified.
+	 */
+	private boolean changeNotified;
 
 	/**
 	 * Constructor
@@ -101,7 +108,23 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		super();
 		this.pet = pet;
 		this.typeSet = typeSet;
-		this.setLayout(null);
+		this.changeNotified = false;
+	}
+	
+	/**
+	 * @return the changeNotified
+	 */
+	public boolean isChangeNotified() {
+		return changeNotified;
+	}
+
+	/**
+	 * Creates a new pet information panel (Main panel).
+	 * 
+	 * @return {@link JPanel} to display all information.
+	 */
+	public JPanel createPetInfoPanel() {
+		JPanel jpanel = new JPanel(null);
 		Font verdanaBold = new Font("Verdana", Font.BOLD, 12);
 		Font verdanaPlain = new Font("Verdana", Font.PLAIN, 12);
 
@@ -115,12 +138,13 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		jlTitle.setForeground(Color.WHITE);
 		jpnTitle.add(jlTitle);
 
-		this.add(jpnTitle);
-		this.add(this.createInfoPanel(verdanaBold, verdanaPlain));
-		this.add(this.createPetImagePanel());
-		this.add(this.createImageActionPanel(verdanaBold, verdanaPlain));
+		jpanel.add(jpnTitle);
+		jpanel.add(this.createInfoPanel(verdanaBold, verdanaPlain));
+		jpanel.add(this.createPetImagePanel());
+		jpanel.add(this.createImageActionPanel(verdanaBold, verdanaPlain));
 
 		this.fillFields();
+		return jpanel;
 	}
 
 	/**
@@ -221,9 +245,47 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		}
 		return breedArray;
 	}
+	
+	/**
+	 * Gets {@link PetBreed} selected on {@link JComboBox} component.
+	 * 
+	 * @return {@link PetBreed} selected on {@link JComboBox}, or null if
+	 * no one was selected yet.
+	 */
+	private PetBreed getBreedSelected() {
+		if (this.jcbPetType.getSelectedIndex() > 0) {
+			for (PetType type : this.typeSet) {
+				if (this.jcbPetType.getSelectedItem().equals(type.getName())) {
+					if (this.jcbBreed.getSelectedIndex() > 0) {
+						for (PetBreed breed : type.getBreedSet()) {
+							if (this.jcbBreed.getSelectedItem().equals(breed.getName())) {
+								return breed;
+							}
+						}
+						break;
+					} else {
+						break;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Notifies to observer that some data was changed.
+	 */
+	private void notifyDataChanged() {
+		if (!this.changeNotified) {
+			this.changeNotified = true;
+			setChanged();
+			notifyObservers();
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		this.notifyDataChanged();
 		if (event.getSource().equals(jcbPetType)) {
 			this.jcbBreed.removeAllItems();
 			String[] breedArray = this.buildPetBreedStringArray();
@@ -247,6 +309,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		jtfName = new JTextField();
 		jtfName.setBounds(160, 10, 250, 20);
 		jtfName.setFont(verdanaPlain);
+		jtfName.addKeyListener(this);
 		jpnGeneralDetail.add(jlbPetName);
 		jpnGeneralDetail.add(jtfName);
 
@@ -268,6 +331,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		jcbBreed = new JComboBox<String>(this.buildPetBreedStringArray());
 		jcbBreed.setBounds(160, 70, 200, 20);
 		jcbBreed.setFont(verdanaPlain);
+		jcbBreed.addActionListener(this);
 		jpnGeneralDetail.add(jlbPetBreed);
 		jpnGeneralDetail.add(jcbBreed);
 
@@ -279,6 +343,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 				Pet.PET_SEX_FEMALE, Pet.PET_SEX_MALE });
 		jcbSex.setBounds(160, 100, 130, 20);
 		jcbSex.setFont(verdanaPlain);
+		jcbSex.addActionListener(this);
 		jpnGeneralDetail.add(jlbPetSex);
 		jpnGeneralDetail.add(jcbSex);
 
@@ -289,6 +354,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		jtfColor = new JTextField();
 		jtfColor.setBounds(160, 130, 250, 20);
 		jtfColor.setFont(verdanaPlain);
+		jtfColor.addKeyListener(this);
 		jpnGeneralDetail.add(jlbPetColor);
 		jpnGeneralDetail.add(jtfColor);
 
@@ -299,6 +365,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		jtfSource = new JTextField();
 		jtfSource.setBounds(160, 160, 250, 20);
 		jtfSource.setFont(verdanaPlain);
+		jtfSource.addKeyListener(this);
 		jpnGeneralDetail.add(jlbPetSource);
 		jpnGeneralDetail.add(jtfSource);
 
@@ -316,6 +383,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 				.setIcon(new ImageIcon(JPPetInfo.class
 						.getResource("/co/com/carp/petcity/image/calendar.png")));
 		((JButton) jdcBornDate.getComponent(1)).setText("");
+		((JButton) jdcBornDate.getComponent(1)).addActionListener(this);
 		((Component) jdcBornDate).setBounds(160, 190, 100, 25);
 		jpnGeneralDetail.add(jlbPetBornDate);
 		jpnGeneralDetail.add((Component) jdcBornDate);
@@ -332,6 +400,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		this.jtfColor.setText("");
 		this.jtfSource.setText("");
 		this.jdcBornDate.getModel().setValue(null);
+		this.changeNotified = false;
 	}
 
 	@Override
@@ -360,6 +429,7 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 			((JButton)jdcBornDate.getComponent(1)).setEnabled(true);
 			this.fillFields();
 		}
+		this.changeNotified = false;
 	}
 
 	@Override
@@ -383,20 +453,18 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		this.changeNotified = false;
 	}
 
 	@Override
-	public boolean updateInformation(Object pet) {
+	public void updateInformation(Object pet) {
 		if (pet != null) {
-			if (this.pet == null || !this.pet.equals((Pet)pet)) {
-				this.pet = (Pet)pet;
-				this.doEnableAllComponents();
-			}
+			this.pet = (Pet)pet;
+			this.doEnableAllComponents();
 		} else {
 			this.pet = null;
 			this.cleanAllFields();
 		}
-		return true;
 	}
 
 	@Override
@@ -411,18 +479,35 @@ public class JPPetInfo extends JPanel implements ActionListener, InformationPane
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub		
+		this.notifyDataChanged();	
 	}
 
 	@Override
 	public Object getObjectDisplayed() {
-		// TODO Auto-generated method stub
-		return null;
+		Pet petCopied = new Pet();
+		if (pet != null) {
+			petCopied.setIdentification(pet.getIdentification());
+		}
+		petCopied.setName(this.jtfName.getText());
+		petCopied.setBreed(getBreedSelected());
+		String petSex = this.jcbSex.getSelectedIndex() > 0 ? this.jcbSex.getSelectedItem().toString() : null;
+		petCopied.setSex(petSex);
+		petCopied.setColor(this.jtfColor.getText());
+		petCopied.setBornPlace(this.jtfSource.getText());
+		String bornDate = ((JFormattedTextField)this.jdcBornDate.getComponent(0)).getText();
+		if (bornDate != null && !bornDate.equals("")) {
+			try {
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+				petCopied.setBornDate(format.parse(bornDate));
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		return petCopied;
 	}
 
 	@Override
 	public Object getObjectOriginal() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.pet;
 	}
 }
