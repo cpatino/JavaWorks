@@ -1,5 +1,12 @@
 package co.com.carp.petcity.controller;
 
+import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_HISTORY;
+import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_NEW_NOTE;
+import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_OWNER;
+import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_PET;
+import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_SAVE;
+import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_VIEW_NOTES;
+
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,17 +19,19 @@ import java.util.TreeSet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
 import co.com.carp.petcity.entity.Owner;
 import co.com.carp.petcity.entity.Pet;
 import co.com.carp.petcity.entity.PetBreed;
 import co.com.carp.petcity.entity.PetType;
+import co.com.carp.petcity.view.JDClinicHistorySummary;
 import co.com.carp.petcity.view.JFOwnerAndPetsInfo;
 import co.com.carp.petcity.view.JPOwnerCardList;
 import co.com.carp.petcity.view.JPOwnerInfo;
 import co.com.carp.petcity.view.JPPetCardList;
 import co.com.carp.petcity.view.JPPetInfo;
 import co.com.carp.petcity.view.JTPetCityTools;
-import static co.com.carp.petcity.view.JTPetCityTools.*;
 
 /**
  * This class is attempt to control all communication between panels done on
@@ -82,11 +91,11 @@ public class OwnerAndPetsInfoController implements Observer {
 		pet.setName("Rita");
 		pet.setSex(Pet.PET_SEX_FEMALE);
 		pet.setColor("Limon");
+		pet.setReproduction(Pet.REPRODUCTION_ENTIRE);
 		try {
 			pet.setBornDate(format.parse("06/05/2013"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (ParseException ex) {
+			Logger.getLogger(this.getClass()).error(ex.getMessage());
 		}
 		pet.setBornPlace("La caracas");
 		
@@ -95,11 +104,11 @@ public class OwnerAndPetsInfoController implements Observer {
 		pet2.setName("Mia");
 		pet2.setSex(Pet.PET_SEX_FEMALE);
 		pet2.setColor("Dorado");
+		pet2.setReproduction(Pet.REPRODUCTION_ENTIRE);
 		try {
 			pet2.setBornDate(format.parse("13/05/2013"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (ParseException ex) {
+			Logger.getLogger(this.getClass()).error(ex.getMessage());
 		}
 		pet2.setBornPlace("La caracas");
 		
@@ -311,40 +320,89 @@ public class OwnerAndPetsInfoController implements Observer {
 	private void executeToolBarAction(String action) {
 		switch (action) {
 		case TOOLBAR_OWNER_PET_INFO_ACTION_SAVE:
-			
+			this.saveAction();
 			break;
 		case TOOLBAR_OWNER_PET_INFO_ACTION_OWNER:
-			
+			this.newOwnerAction();
 			break;
 		case TOOLBAR_OWNER_PET_INFO_ACTION_PET:
-			
+			this.newPetAction();
 			break;
 		case TOOLBAR_OWNER_PET_INFO_ACTION_HISTORY:
-			
+			this.viewClinicHistory();
 			break;
 		case TOOLBAR_OWNER_PET_INFO_ACTION_NEW_NOTE:
-			
+			this.newNoteAction();
 			break;
 		case TOOLBAR_OWNER_PET_INFO_ACTION_VIEW_NOTES:
-			
+			this.viewNotesAction();
 			break;
 		default:
+			JOptionPane.showMessageDialog(null, "Acción no valida");
 			break;
 		}
 	}
 	
+	/**
+	 * This action is called when user try to save information after click
+	 * on tool bar button or when it was confirmed through message dialog.
+	 */
+	private void saveAction() {
+		//TODO: Make save action here.
+	}
+	
+	/**
+	 * This action is called when user try to create a new owner.
+	 */
+	private void newOwnerAction() {
+		//TODO: Make new user action here.
+	}
+	
+	/**
+	 * This action is called when user try to create a new pet for user.
+	 */
+	private void newPetAction() {
+		//TODO: Make new pet action here.
+	}
+	
+	/**
+	 * This action is called when user try to display clinic history screen
+	 * for selected pet.
+	 */
+	private void viewClinicHistory() {
+		Pet pet = (Pet)this.jpPetInfo.getObjectOriginal();
+		if (pet != null) {
+			new JDClinicHistorySummary(pet).setVisible(true);
+		}
+	}
+	
+	/**
+	 * This action is called when user try to create a new note for selected
+	 * pet.
+	 */
+	private void newNoteAction() {
+		//TODO: Make new note action here.
+	}
+	
+	/**
+	 * This action is called when user try to view all notes created.
+	 */
+	private void viewNotesAction() {
+		//TODO: Make view notes action here.
+	}
+	
 	@Override
-	public void update(Observable observable, Object arg) {
+	public void update(Observable observable, Object object) {
 		if (observable instanceof JPOwnerCardList) {
-			this.changeOwnerInOwnerInfoPanel((Owner)arg);
+			this.changeOwnerInOwnerInfoPanel((Owner)object);
 		} else if (observable instanceof JPPetCardList) {
-			this.changePetInPetInfoPanel((Pet)arg);
+			this.changePetInPetInfoPanel((Pet)object);
 		} else if (observable instanceof JPOwnerInfo) {
 			this.jtPetCityTools.makeEnableSaveAction(true);
 		} else if (observable instanceof JPPetInfo) {
 			this.jtPetCityTools.makeEnableSaveAction(true);
 		} else if (observable instanceof JTPetCityTools) {
-			this.executeToolBarAction((String)arg);
+			this.executeToolBarAction((String)object);
 		}
 	}
 

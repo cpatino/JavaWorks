@@ -1,6 +1,6 @@
 package co.com.carp.petcity.entity;
 
-import java.util.HashSet;
+import java.util.Map;
 
 /**
  * This class is attempt to manage pet's food. 
@@ -22,7 +22,7 @@ public class PetFood {
 	/**
 	 * Set of food brand
 	 */
-	private HashSet<FoodBrand> foodBrandSet; 
+	private Map<Integer, FoodBrand> foodBrandMap; 
 	
 	/**
 	 * Food brand selected
@@ -58,17 +58,17 @@ public class PetFood {
 	}
 
 	/**
-	 * @return the foodBrandSet
+	 * @return the foodBrandMap
 	 */
-	public HashSet<FoodBrand> getFoodBrandSet() {
-		return foodBrandSet;
+	public Map<Integer, FoodBrand> getFoodBrandMap() {
+		return foodBrandMap;
 	}
 
 	/**
-	 * @param foodBrandSet the foodBrandSet to set
+	 * @param foodBrandMap the foodBrandMap to set
 	 */
-	public void setFoodBrandSet(HashSet<FoodBrand> foodBrandSet) {
-		this.foodBrandSet = foodBrandSet;
+	public void setFoodBrandMap(Map<Integer, FoodBrand> foodBrandMap) {
+		this.foodBrandMap = foodBrandMap;
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class PetFood {
 	@Override
 	public String toString() {
 		return "PetFood={identification:" + this.identification + ";name:" + this.name + 
-				";foodBrand:" + this.foodBrandSet.toString() + ";FoodBrandSelected:" + this.foodBrandSelected +
+				";foodBrand:" + this.foodBrandMap.toString() + ";FoodBrandSelected:" + this.foodBrandSelected +
 				"}";
 	}
 }

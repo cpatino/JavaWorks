@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
+import javax.swing.JComboBox;
+
 /**
  * This class is attempt to control all necessary configuration that will be
  * load from config.property file. All static finals variables must exists on
@@ -14,6 +16,12 @@ import java.util.TreeMap;
  * 
  */
 public class Configuration {
+	
+	/**
+	 * This message is used around the entire application, the most of times when 
+	 * a {@link JComboBox} value needs to be selected. 
+	 */
+	public static String SELECT_ONE_MSG = "Seleccione uno...";
 
 	/**
 	 * Own object that doesn't allow create another instance from itself.

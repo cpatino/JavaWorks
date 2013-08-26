@@ -2,7 +2,7 @@ package co.com.carp.petcity.entity;
 
 import java.awt.Image;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -21,6 +21,31 @@ public class Pet {
 	 * It indicates that pet is a female.
 	 */
 	public static final String PET_SEX_FEMALE = "Hembra";
+	
+	/**
+	 * Indicates that reproduction is entire
+	 */
+	public static final String REPRODUCTION_ENTIRE = "Entero"; 
+	
+	/**
+	 * Indicates that reproduction is sterilized
+	 */
+	public static final String REPRODUCTION_STERILIZED = "Esterilizado";
+	
+	/**
+	 * Indicates that reproduction is between 1 or 2 births
+	 */
+	public static final String REPRODUCTION_ONE_TWO = "1 a 2 partos";
+	
+	/**
+	 * Indicates that reproduction is between 3 or 4 births
+	 */
+	public static final String REPRODUCTION_THREE_FOUR = "3 a 4 partos";
+	
+	/**
+	 * Indicates that reproduction is between 5 or more births
+	 */
+	public static final String REPRODUCTION_FIVE_MORE = "5 o más partos";
 	
 	/**
 	 * Pet's identification
@@ -60,7 +85,7 @@ public class Pet {
 	/**
 	 * Pet's drenching set
 	 */
-	private HashSet<PetDrenching> drenching;
+	private Set<PetDrenching> drenchingSet;
 	
 	/**
 	 * Pet's reproduction
@@ -75,7 +100,7 @@ public class Pet {
 	/**
 	 * Vaccines applied to pet
 	 */
-	private TreeSet<PetVaccine> vaccineSet;
+	private Set<PetVaccine> vaccineSet;
 	
 	/**
 	 * It contains all pet's clinic history, it includes all medical consultations.
@@ -188,15 +213,15 @@ public class Pet {
 	/**
 	 * @return the drenching
 	 */
-	public HashSet<PetDrenching> getDrenching() {
-		return drenching;
+	public Set<PetDrenching> getDrenching() {
+		return drenchingSet;
 	}
 
 	/**
 	 * @param drenching the drenching to set
 	 */
-	public void setDrenching(HashSet<PetDrenching> drenching) {
-		this.drenching = drenching;
+	public void setDrenching(Set<PetDrenching> drenchingSet) {
+		this.drenchingSet = drenchingSet;
 	}
 
 	/**
@@ -230,14 +255,14 @@ public class Pet {
 	/**
 	 * @return the vaccineSet
 	 */
-	public TreeSet<PetVaccine> getVaccineSet() {
+	public Set<PetVaccine> getVaccineSet() {
 		return vaccineSet;
 	}
 
 	/**
 	 * @param vaccineSet the vaccineSet to set
 	 */
-	public void setVaccineSet(TreeSet<PetVaccine> vaccineSet) {
+	public void setVaccineSet(Set<PetVaccine> vaccineSet) {
 		this.vaccineSet = vaccineSet;
 	}
 
@@ -284,7 +309,7 @@ public class Pet {
 				+ ((clinicHistory == null) ? 0 : clinicHistory.hashCode());
 		result = prime * result + ((color == null) ? 0 : color.hashCode());
 		result = prime * result
-				+ ((drenching == null) ? 0 : drenching.hashCode());
+				+ ((drenchingSet == null) ? 0 : drenchingSet.hashCode());
 		result = prime * result + identification;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
@@ -342,11 +367,11 @@ public class Pet {
 		} else if (!color.equals(other.color)) {
 			return false;
 		}
-		if (drenching == null) {
-			if (other.drenching != null) {
+		if (drenchingSet == null) {
+			if (other.drenchingSet != null) {
 				return false;
 			}
-		} else if (!drenching.equals(other.drenching)) {
+		} else if (!drenchingSet.equals(other.drenchingSet)) {
 			return false;
 		}
 		if (identification != other.identification) {
@@ -412,7 +437,7 @@ public class Pet {
 		return "Pet [identification=" + identification + ", name=" + name
 				+ ", breed=" + breed + ", color=" + color + ", sex=" + sex
 				+ ", bornDate=" + bornDate + ", bornPlace=" + bornPlace
-				+ ", drenching=" + drenching + ", reproduction=" + reproduction
+				+ ", drenching=" + drenchingSet + ", reproduction=" + reproduction
 				+ ", photo=" + photo + ", vaccineSet=" + vaccineSet
 				+ ", notificationSet=" + this.notificationSet.toString()
 				+ ", clinicHistory=" + clinicHistory + "]";

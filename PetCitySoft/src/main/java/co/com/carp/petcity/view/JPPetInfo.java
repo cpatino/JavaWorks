@@ -20,11 +20,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import org.apache.log4j.Logger;
 
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
@@ -32,6 +35,8 @@ import net.sourceforge.jdatepicker.impl.UtilCalendarModel;
 import co.com.carp.petcity.entity.Pet;
 import co.com.carp.petcity.entity.PetBreed;
 import co.com.carp.petcity.entity.PetType;
+import static co.com.carp.petcity.util.Configuration.SELECT_ONE_MSG;
+import static co.com.carp.petcity.entity.Pet.*;
 
 /**
  * This class is attempt to manage information from pets, those information can be inserted, updated.
@@ -44,7 +49,7 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 	/**
 	 * Auto-generated serial version
 	 */
-	private static final long serialVersionUID = -1250251333816555407L;
+	private static final long serialVersionUID = -1250251333816555407L;	
 
 	/**
 	 * {@link Pet} actually been displayed on screen.
@@ -73,10 +78,15 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 	private JComboBox<String> jcbSex;
 
 	/**
-	 * {@link JComboBox} with ; values displayed dependents from 
+	 * {@link JComboBox} with breeds that dependents from 
 	 * selection done on {@link PetType}(s) {@link JComboBox}.
 	 */
 	private JComboBox<String> jcbBreed;
+	
+	/**
+	 * {@link JComboBox} with reproduction status from {@link Pet}.
+	 */
+	private JComboBox<String> jcbReproductionStatus;
 
 	/**
 	 * {@link JTextField} that stores pet's color.
@@ -185,14 +195,14 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 		JPanel jpnPetImageActions = new JPanel(null);
 		jpnPetImageActions.setBorder(BorderFactory
 				.createLineBorder(Color.BLACK));
-		jpnPetImageActions.setBounds(540, 250, 200, 40);
+		jpnPetImageActions.setBounds(540, 250, 200, 45);
 		jpnPetImageActions.setBackground(new Color(250, 245, 245));
 
 		JButton jbtLoadImage = new JButton("Cargar imagen");
 		jbtLoadImage.setForeground(new Color(255, 255, 255));
 		jbtLoadImage.setBackground(new Color(30, 144, 255));
 		jbtLoadImage.setFont(new Font("Verdana", Font.BOLD, 12));
-		jbtLoadImage.setBounds(70, 10, 120, 20);
+		jbtLoadImage.setBounds(70, 10, 120, 25);
 		jbtLoadImage.addActionListener(this);
 		jpnPetImageActions.add(jbtLoadImage);
 
@@ -207,7 +217,7 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 	 */
 	private String[] buildPetTypeStringArray() {
 		String[] typeArray = new String[this.typeSet.size() + 1];
-		typeArray[0] = "Seleccione uno...";
+		typeArray[0] = SELECT_ONE_MSG;
 		int arrayPos = 1;
 		for(PetType type : typeSet) {
 			typeArray[arrayPos] = type.getName();
@@ -225,20 +235,20 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 	private String[] buildPetBreedStringArray() {
 		String[] breedArray = null;
 		if (jcbPetType.getSelectedIndex() == 0) {
-			breedArray = new String[] { "Seleccione uno..." };
+			breedArray = new String[] { SELECT_ONE_MSG };
 		} else {
 			for (PetType type : typeSet) {
 				if (type.getName().equalsIgnoreCase(jcbPetType.getSelectedItem().toString())) {
 					if (type.getBreedSet() != null) {
 						breedArray = new String[type.getBreedSet().size() + 1];
-						breedArray[0] = "Seleccione uno...";
+						breedArray[0] = SELECT_ONE_MSG;
 						int arrayPos = 1;
 						for (PetBreed breed : type.getBreedSet()) {
 							breedArray[arrayPos] = breed.getName();
 							arrayPos++;
 						}
 					} else {
-						breedArray = new String[] { "Seleccione uno..." };
+						breedArray = new String[] { SELECT_ONE_MSG };
 					}
 				}
 			}
@@ -299,7 +309,7 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 	public JPanel createInfoPanel(Font verdanaBold, Font verdanaPlain) {
 		JPanel jpnGeneralDetail = new JPanel(null);
 		jpnGeneralDetail.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		jpnGeneralDetail.setBounds(10, 45, 525, 245);
+		jpnGeneralDetail.setBounds(10, 45, 525, 250);
 		jpnGeneralDetail.setBackground(new Color(250, 245, 245));
 
 		JLabel jlbPetName = new JLabel("Nombre:");
@@ -339,7 +349,7 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 		jlbPetSex.setBounds(10, 100, 145, 20);
 		jlbPetSex.setFont(verdanaBold);
 		jlbPetSex.setHorizontalAlignment(SwingConstants.RIGHT);
-		jcbSex = new JComboBox<String>(new String[] { "Seleccione uno...",
+		jcbSex = new JComboBox<String>(new String[] { SELECT_ONE_MSG,
 				Pet.PET_SEX_FEMALE, Pet.PET_SEX_MALE });
 		jcbSex.setBounds(160, 100, 130, 20);
 		jcbSex.setFont(verdanaPlain);
@@ -387,6 +397,19 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 		((Component) jdcBornDate).setBounds(160, 190, 100, 25);
 		jpnGeneralDetail.add(jlbPetBornDate);
 		jpnGeneralDetail.add((Component) jdcBornDate);
+		
+		JLabel jlbPetRepStatus = new JLabel("Reproducción:");
+		jlbPetRepStatus.setBounds(10, 220, 145, 20);
+		jlbPetRepStatus.setFont(verdanaBold);
+		jlbPetRepStatus.setHorizontalAlignment(SwingConstants.RIGHT);
+		jcbReproductionStatus = new JComboBox<String>(new String[] { SELECT_ONE_MSG, 
+				REPRODUCTION_ENTIRE, REPRODUCTION_STERILIZED, REPRODUCTION_ONE_TWO,
+				REPRODUCTION_THREE_FOUR, REPRODUCTION_FIVE_MORE});
+		jcbReproductionStatus.setBounds(160, 220, 200, 20);
+		jcbReproductionStatus.setFont(verdanaPlain);
+		jcbReproductionStatus.addActionListener(this);
+		jpnGeneralDetail.add(jlbPetRepStatus);
+		jpnGeneralDetail.add(jcbReproductionStatus);
 
 		return jpnGeneralDetail;
 	}
@@ -400,6 +423,7 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 		this.jtfColor.setText("");
 		this.jtfSource.setText("");
 		this.jdcBornDate.getModel().setValue(null);
+		this.jcbReproductionStatus.setSelectedIndex(0);
 		this.changeNotified = false;
 	}
 
@@ -413,6 +437,7 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 		this.jtfSource.setEnabled(false);
 		this.jdcBornDate.setEnabled(false);
 		((JButton)jdcBornDate.getComponent(1)).setEnabled(false);
+		this.jcbReproductionStatus.setEnabled(false);
 		this.cleanAllFields();
 	}
 
@@ -427,6 +452,7 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 			this.jtfSource.setEnabled(true);
 			this.jdcBornDate.setEnabled(true);
 			((JButton)jdcBornDate.getComponent(1)).setEnabled(true);
+			this.jcbReproductionStatus.setEnabled(true);
 			this.fillFields();
 		}
 		this.changeNotified = false;
@@ -451,8 +477,11 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 			((JFormattedTextField)this.jdcBornDate.getComponent(0)).setText(format.format(pet.getBornDate()));
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Logger.getLogger(this.getClass()).error(ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Fecha de nacimiento no está en el formato correcto", 
+					"Error de conversión", JOptionPane.ERROR_MESSAGE);
 		}
+		this.jcbReproductionStatus.setSelectedItem(pet.getReproduction());
 		this.changeNotified = false;
 	}
 
@@ -500,9 +529,14 @@ public class JPPetInfo extends Observable implements ActionListener, Information
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 				petCopied.setBornDate(format.parse(bornDate));
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				Logger.getLogger(this.getClass()).error(ex.getMessage());
+				JOptionPane.showMessageDialog(null, "Fecha de nacimiento no está en el formato correcto", 
+						"Error de conversión", JOptionPane.ERROR_MESSAGE);
 			}
 		}
+		String reproduction = this.jcbReproductionStatus.getSelectedIndex() > 0 ? 
+				this.jcbReproductionStatus.getSelectedItem().toString() : null;
+		petCopied.setReproduction(reproduction);
 		return petCopied;
 	}
 
