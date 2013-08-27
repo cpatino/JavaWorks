@@ -1,0 +1,5 @@
+package co.com.carp.petcity.controller;
+
+public class ClinicHistorySummaryController {
+
+}

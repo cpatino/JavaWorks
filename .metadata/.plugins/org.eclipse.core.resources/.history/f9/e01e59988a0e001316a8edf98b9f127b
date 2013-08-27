@@ -1,0 +1,152 @@
+/**
+ * 
+ */
+package co.com.carp.petcity.view;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.Observable;
+import java.util.Set;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilCalendarModel;
+import co.com.carp.view.JFramePetVaccine;
+import co.com.carp.view.JPanelPetAndOwnerAction;
+
+/**
+ * This class is attempt to be a model to build all {@link JPanel}(s) that 
+ * will display information in a tabular way.
+ * 
+ * @author Carlos Rodriguez
+ */
+public abstract class TableDataStructure extends Observable implements ActionListener {
+	
+	/**
+	 * The set of objects to be displayed;
+	 */
+	private Set<?> objectSet;
+	
+	/**
+	 * The columns name from table.
+	 */
+	private String columnNames[];
+	
+	
+	/**
+	 * Label that will describe the information that is required to be filled.
+	 */
+	private JLabel jlbDescription;
+	
+	public TableDataStructure(Set<?> objectSet) {
+		super();
+		this.objectSet = objectSet;
+	}
+	
+	/**
+	 * Sets text to description label.
+	 * 
+	 * @param description the description to be set on {@link JLabel}.
+	 */
+	public void setJlbDescriptionText(String description) {
+		this.jlbDescription.setText(description);
+	}
+	
+	/**
+	 * @param columnNames the columnNames to set
+	 */
+	public void setColumnNames(String[] columnNames) {
+		this.columnNames = columnNames;
+	}	
+	
+	/**
+	 * It will create main panel that will contains a tab to display information
+	 * and a button to add a new element.
+	 * 
+	 * @return
+	 */
+	public JPanel createTabPanel() {
+		JPanel jpTabPanel = new JPanel(new BorderLayout());
+		return jpTabPanel;
+	}
+	
+	private JPanel createFillInfoPanel() {
+		JPanel jpnMainMenu = new JPanel(null);
+		jpnMainMenu.setPreferredSize(new Dimension(400, 100));
+		Font verdanaBold = new Font("Verdana", Font.BOLD, 12);
+		
+		this.jlbDescription = new JLabel();
+		jlbDescription.setBounds(10, 10, 80, 20);
+		jlbDescription.setFont(verdanaBold);
+		
+		this.jtfVaccineName = new JTextField();
+		this.jtfVaccineName.setBounds(80, 10, 230, 20);
+		this.jtfVaccineName.setFont(new Font("Verdana", Font.PLAIN, 12));
+		
+		JLabel jlbProgramatedDate = new JLabel("Fecha de aplicación:");
+		jlbProgramatedDate.setBounds(10, 40, 150, 20);
+		jlbProgramatedDate.setFont(verdanaBold);
+		jdcApplicationDate = new JDatePickerImpl(new JDatePanelImpl(new UtilCalendarModel()));
+		jdcApplicationDate.getModel().setDate(Calendar.getInstance().get(Calendar.YEAR), 
+				Calendar.getInstance().get(Calendar.MONTH), 
+				Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+		ImageIcon icon = new ImageIcon(JPanelPetAndOwnerAction.class.getResource("/images/calendar.png")); 
+		((JButton)jdcApplicationDate.getComponent(1)).setIcon(icon);
+		((JButton)jdcApplicationDate.getComponent(1)).setText("");
+		((Component) jdcApplicationDate).setBounds(160, 40, 150, 25);
+		
+		
+		icon = new ImageIcon(JFramePetVaccine.class.getResource("/images/disk_blue.png"));
+		this.jbtAdd = new JButton(icon);
+		this.jbtAdd.setBounds(315, 10, 60, 55);
+		this.jbtAdd.addActionListener(this);
+		
+		jpnMainMenu.add(jlbDescription);
+		jpnMainMenu.add(jtfVaccineName);
+		jpnMainMenu.add(jlbProgramatedDate);
+		jpnMainMenu.add((Component) jdcApplicationDate);
+		jpnMainMenu.add(jbtAdd);
+		
+		return jpnMainMenu;
+	}
+	
+	/**
+	 * Creates a scroll pane that will contains the table.
+	 * 
+	 * @return {@link JScrollPane} scroll pane to be displayed.
+	 */
+	private JScrollPane createScrollPanel() {
+		TableModel model = this.createTableModel();
+	    JTable table = new JTable(model); 
+
+	    TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(model);
+	    table.setRowSorter(sorter);
+
+	    JScrollPane scrollPane = new JScrollPane(table);
+	    scrollPane.setPreferredSize(new Dimension(400, 400));
+	    return scrollPane;
+	}
+	
+	/**
+	 * Creates table model that will be used to display information 
+	 * correctly.
+	 * 
+	 * @return {@link TableModel} that will be used to display table.
+	 */
+	protected abstract TableModel createTableModel();
+
+}

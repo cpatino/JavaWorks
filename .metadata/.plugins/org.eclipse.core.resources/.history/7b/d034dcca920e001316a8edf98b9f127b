@@ -1,0 +1,54 @@
+package co.com.carp.petcity.view;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Set;
+
+import javax.swing.JPanel;
+
+/**
+ * This class is attempt to be a model to build card list panels
+ * using vertical orientation.
+ * 
+ * @author Carlos Rodriguez
+ *
+ */
+public abstract class VerticalCardList extends Observable implements
+		ActionListener, ObjectCardListable {
+
+	@Override
+	public abstract JPanel createSearchAndListSection(Set<?> objectSet,
+			int allowedDimension);
+
+	@Override
+	public void updateCards(Set<?> objectSet) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public JPanel buildViewPort() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JPanel createCard(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void refreshCardList() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

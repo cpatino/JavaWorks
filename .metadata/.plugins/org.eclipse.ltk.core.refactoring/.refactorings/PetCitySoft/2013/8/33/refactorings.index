@@ -1,0 +1,16 @@
+1376333782466	Rename local variable 'owner'
+1376338567810	Rename method 'drawnGeneralDataPanel'
+1376338579444	Rename method 'drawnPetImagePanel'
+1376338589866	Rename method 'drawnImageActionPanel'
+1376339844424	Rename type 'PetAndOwnerInfoTabController'
+1376340635165	Rename local variable 'searchAndList'
+1376341386537	Rename method 'createOwnerInfoPanel'
+1376341753685	Rename method 'replaceOwnerInformation'
+1376343955103	Rename field 'jcbKind'
+1376343960733	Rename field 'jcbType'
+1376345354923	Rename method 'readConfiguration'
+1376409148667	Delete element
+1376409153502	Delete element
+1376409242721	Rename local variable 'jbtNew'
+1376409357489	Rename resource 'dog.png'
+1376429856544	Rename local variable 'owner'

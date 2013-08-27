@@ -1,0 +1,203 @@
+package co.com.carp.view;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JViewport;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilCalendarModel;
+import co.com.carp.data.model.Vaccine;
+import co.com.carp.logic.controller.VaccineController;
+
+public class JFramePetVaccine extends JDialog implements ActionListener {
+
+	/**
+	 * Generated serial version
+	 */
+	private static final long serialVersionUID = -9188837757128469555L;
+	
+	private JTextField jtfVaccineName;
+	
+	private JDatePickerImpl jdcApplicationDate;
+	
+	private JButton jbtAdd;
+	
+	public static void main(String... args) {
+		JFramePetVaccine pv = new JFramePetVaccine(0);
+		pv.setVisible(true);
+	}
+	
+	public JFramePetVaccine(int petId) {
+		super();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int posX = (int) (screenSize.getWidth() / 2) - 200; 
+		int posY = (int) (screenSize.getHeight() / 2) - 200;
+		this.setBounds(posX, posY, 400, 500);
+		this.setTitle("Pet World - Control de vacunacion");
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setModalityType(ModalityType.APPLICATION_MODAL);
+		this.setIconImage(new ImageIcon(PetWorldMain.class.getResource("/images/dog-city.png")).getImage());
+		this.setLayout(new BorderLayout());
+		
+		VaccineController.getInstance().setPetId(petId);
+		this.add(this.createMainMenuPanel(), BorderLayout.NORTH);
+		this.add(this.createTableSubPanel(), BorderLayout.CENTER);
+		try {
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			((JFormattedTextField)this.jdcApplicationDate.getComponent(0)).setText(format.format(
+					Calendar.getInstance().getTime()));			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent evt) {
+		if (evt.getSource().equals(jbtAdd)) {
+			if (!((JFormattedTextField)this.jdcApplicationDate.getComponent(0)).getText().equals("")
+					&& !jtfVaccineName.getText().trim().equals("")) {
+				try {
+					String messageToShow = "";
+					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+					if (VaccineController.getInstance().save(jtfVaccineName.getText(), 
+							format.parse(((JFormattedTextField)this.jdcApplicationDate.getComponent(0)).getText()))) {
+						messageToShow = "Vacuna guardada.";	
+						this.reloadScreen();
+					} else {
+						messageToShow = "Ocurrio un error, la vacuna no pudo ser guardada.";
+					}
+					JOptionPane.showMessageDialog(null, messageToShow);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Debe llenar todos los datos de la pantalla.");
+			}
+		}
+	}
+	
+	private void reloadScreen() {
+		JScrollPane jspScroll = (JScrollPane) ((JPanel) ((JLayeredPane) ((JRootPane) this
+				.getComponent(0)).getComponent(1)).getComponent(0))
+				.getComponent(1);
+		JViewport jvpViewPort = jspScroll.getViewport();
+		jvpViewPort.removeAll();
+		TableModel model = this.createTableModel();
+		JTable table = new JTable(model);
+
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
+				model);
+		table.setRowSorter(sorter);
+		jvpViewPort.add(table);
+		
+		this.jtfVaccineName.setText("");
+		try {
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			((JFormattedTextField)this.jdcApplicationDate.getComponent(0)).setText(format.format(
+					Calendar.getInstance().getTime()));			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	private JPanel createMainMenuPanel() {
+		JPanel jpnMainMenu = new JPanel(null);
+		jpnMainMenu.setPreferredSize(new Dimension(400, 100));
+		Font verdanaBold = new Font("Verdana", Font.BOLD, 12);
+		
+		JLabel jlbDescription = new JLabel("Vacuna:");
+		jlbDescription.setBounds(10, 10, 80, 20);
+		jlbDescription.setFont(verdanaBold);
+		
+		this.jtfVaccineName = new JTextField();
+		this.jtfVaccineName.setBounds(80, 10, 230, 20);
+		this.jtfVaccineName.setFont(new Font("Verdana", Font.PLAIN, 12));
+		
+		JLabel jlbProgramatedDate = new JLabel("Fecha de aplicación:");
+		jlbProgramatedDate.setBounds(10, 40, 150, 20);
+		jlbProgramatedDate.setFont(verdanaBold);
+		jdcApplicationDate = new JDatePickerImpl(new JDatePanelImpl(new UtilCalendarModel()));
+		jdcApplicationDate.getModel().setDate(Calendar.getInstance().get(Calendar.YEAR), 
+				Calendar.getInstance().get(Calendar.MONTH), 
+				Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+		ImageIcon icon = new ImageIcon(JPanelPetAndOwnerAction.class.getResource("/images/calendar.png")); 
+		((JButton)jdcApplicationDate.getComponent(1)).setIcon(icon);
+		((JButton)jdcApplicationDate.getComponent(1)).setText("");
+		((Component) jdcApplicationDate).setBounds(160, 40, 150, 25);
+		
+		
+		icon = new ImageIcon(JFramePetVaccine.class.getResource("/images/disk_blue.png"));
+		this.jbtAdd = new JButton(icon);
+		this.jbtAdd.setBounds(315, 10, 60, 55);
+		this.jbtAdd.addActionListener(this);
+		
+		jpnMainMenu.add(jlbDescription);
+		jpnMainMenu.add(jtfVaccineName);
+		jpnMainMenu.add(jlbProgramatedDate);
+		jpnMainMenu.add((Component) jdcApplicationDate);
+		jpnMainMenu.add(jbtAdd);
+		
+		return jpnMainMenu;
+	}
+	
+	private JScrollPane createTableSubPanel() {
+		TableModel model = this.createTableModel();
+	    JTable table = new JTable(model); 
+
+	    TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(model);
+	    table.setRowSorter(sorter);
+
+	    JScrollPane scrollPane = new JScrollPane(table);
+	    scrollPane.setPreferredSize(new Dimension(400, 400));
+	    return scrollPane;
+	}
+	
+	private TableModel createTableModel() {
+		ArrayList<Vaccine> vaccineList = VaccineController.getInstance().loadAllData();
+		Object[][] dataToModel = null;
+		String columnNames[] = { "Vacuna", "Fecha aplicación" };
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		if (vaccineList.size() > 0) {
+			dataToModel = new Object[vaccineList.size()][5];
+			for(int i = 0; i < vaccineList.size(); i++) {
+				Vaccine vaccine = vaccineList.get(i);
+				dataToModel[i][0] = vaccine.getName();
+				dataToModel[i][1] = format.format(vaccine.getApplicationDate());
+			}			
+		}
+		return new DefaultTableModel(dataToModel, columnNames) {
+
+			private static final long serialVersionUID = 1L;
+
+			public Class<?> getColumnClass(int column) {
+				return getValueAt(0, column).getClass();
+			}
+		};
+	}
+}
