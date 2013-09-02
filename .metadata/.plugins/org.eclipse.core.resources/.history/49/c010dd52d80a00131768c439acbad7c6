@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="PetCityPU">
+	    <class>co.com.carp.petcity.jpa.entity.User</class>
+	    <class>co.com.carp.petcity.jpa.entity.Pet</class>
+	    <class>co.com.carp.petcity.jpa.entity.Clinichistory</class>
+	    <class>co.com.carp.petcity.jpa.entity.Foodbrand</class>
+	    <class>co.com.carp.petcity.jpa.entity.Medicalconsultation</class>
+	    <class>co.com.carp.petcity.jpa.entity.Notification</class>
+	    <class>co.com.carp.petcity.jpa.entity.Owner</class>
+	    <class>co.com.carp.petcity.jpa.entity.Petbreed</class>
+	    <class>co.com.carp.petcity.jpa.entity.Petdrenching</class>
+	    <class>co.com.carp.petcity.jpa.entity.Petexam</class>
+	    <class>co.com.carp.petcity.jpa.entity.Petfood</class>
+	    <class>co.com.carp.petcity.jpa.entity.Pettype</class>
+	    <class>co.com.carp.petcity.jpa.entity.Petvaccine</class>
+	    <class>co.com.carp.petcity.jpa.entity.Petvisitinfo</class>
+<properties>
+<property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.1.2:3306/PetCity_DogCity"/>
+<property name="javax.persistence.jdbc.user" value="root"/>
+<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+<property name="javax.persistence.jdbc.password" value="root.123"/>
+<property name="eclipelink.ddl-generation" value="drop-and-create-tables"/>
+</properties>
+	</persistence-unit>
+</persistence>
+	

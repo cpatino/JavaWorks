@@ -1,0 +1,28 @@
+package co.com.carp.petcity.dao;
+
+import java.util.List;
+
+import javax.persistence.Query;
+
+import co.com.carp.petcity.jpa.entity.Owner;
+
+public class OwnerDAO extends GenericDAO {
+
+	@SuppressWarnings("unchecked")
+	public List<Owner> findOwnerForFilter(String filter) {
+		String strWhere = "";
+		List<Owner> ownerList = null;
+		if (!filter.isEmpty()) {
+			strWhere = "documentId like '%" + filter + "%'  or name like '%"
+					+ filter + "%'";
+		}
+
+		Query query = em.createNativeQuery("Select * from owner " + strWhere);
+		List<Owner> ownerList = query.getResultList();
+		for (Owner owner:ownerList){
+			
+		}
+		return res;
+	}
+
+}

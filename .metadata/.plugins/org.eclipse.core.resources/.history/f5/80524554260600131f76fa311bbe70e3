@@ -1,0 +1,16 @@
+
+
+import co.com.carp.petcity.controller.PetAndOwnerInfoTabController;
+
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		PetAndOwnerInfoTabController obj = new PetAndOwnerInfoTabController();
+		obj.queryOwnerInfo("19604742");
+
+	}
+
+}
