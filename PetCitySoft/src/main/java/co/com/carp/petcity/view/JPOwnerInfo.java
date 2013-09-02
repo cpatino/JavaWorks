@@ -292,8 +292,8 @@ public class JPOwnerInfo extends Observable implements InformationPanelFillable 
 		ownerCopied.setDocumentId(Integer.parseInt(this.jtfOwnerId.getText()));
 		ownerCopied.setName(this.jtfOwnerName.getText());
 		ownerCopied.setAddress(this.jtfOwnerAddress.getText());
-		ownerCopied.setPhone(Integer.parseInt(this.jtfOwnerPhone.getText()));
-		ownerCopied.setCellphone(new BigInteger(this.jtfOwnerCellphone.getText()));
+		ownerCopied.setPhone(this.jtfOwnerPhone.getText());
+		ownerCopied.setCellphone(this.jtfOwnerCellphone.getText());
 		ownerCopied.setEmail(this.jtfOwnerEmail.getText());
 		return ownerCopied;
 	}

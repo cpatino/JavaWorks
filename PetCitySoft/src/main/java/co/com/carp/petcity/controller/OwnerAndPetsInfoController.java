@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -21,6 +22,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
+import co.com.carp.petcity.dao.OwnerDAO;
 import co.com.carp.petcity.entity.Owner;
 import co.com.carp.petcity.entity.Pet;
 import co.com.carp.petcity.entity.PetBreed;
@@ -75,9 +77,13 @@ public class OwnerAndPetsInfoController implements Observer {
 	 * @return Owner set with all information obtained from database.
 	 */
 	public Set<Owner> queryOwnerInfo(String toLookFor) {
+		OwnerDAO ownerDAO = new OwnerDAO();
 		this.ownerSet = new TreeSet<>();
+		ownerSet = ownerDAO.findOwnerForFilter(toLookFor);
+		System.out.println("Size="+ownerSet.size());
+		
 		//Fake data
-		Owner owner = new Owner();
+		/*Owner owner = new Owner();
 		owner.setIdentification(1);
 		owner.setDocumentId(19604742);
 		owner.setName("Carlos Rodriguez");
@@ -143,7 +149,7 @@ public class OwnerAndPetsInfoController implements Observer {
 		owner.setPhone(5109965);
 		
 		this.ownerSet.add(owner);
-		
+		*/
 		return this.ownerSet;
 	}
 	

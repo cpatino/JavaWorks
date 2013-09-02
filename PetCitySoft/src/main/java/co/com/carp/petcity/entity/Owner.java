@@ -19,12 +19,12 @@ public class Owner extends Person implements Comparable<Owner> {
 	/**
 	 * Owner cell-phone
 	 */
-	private BigInteger cellphone;
+	private String cellphone;
 	
 	/**
 	 * Owner phone
 	 */
-	private int phone;
+	private String phone;
 	
 	/**
 	 * Pet set from owner
@@ -48,28 +48,28 @@ public class Owner extends Person implements Comparable<Owner> {
 	/**
 	 * @return the cellphone
 	 */
-	public BigInteger getCellphone() {
+	public String getCellphone() {
 		return cellphone;
 	}
 
 	/**
 	 * @param cellphone the cellphone to set
 	 */
-	public void setCellphone(BigInteger cellphone) {
+	public void setCellphone(String cellphone) {
 		this.cellphone = cellphone;
 	}
 
 	/**
 	 * @return the phone
 	 */
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
 	/**
 	 * @param phone the phone to set
 	 */
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
@@ -97,8 +97,10 @@ public class Owner extends Person implements Comparable<Owner> {
 		int result = super.hashCode();
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result
-				+ ((cellphone == null) ? 0 : cellphone.hashCode());
-		result = prime * result + phone;
+				+ ((cellphone == null) ? 0 : cellphone.hashCode());		
+		result = prime * result
+				+ ((phone == null) ? 0 : cellphone.hashCode());
+		
 		return result;
 	}
 
