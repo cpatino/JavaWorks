@@ -1,6 +1,5 @@
 package co.com.carp.petcity.entity;
 
-import java.math.BigInteger;
 import java.util.Set;
 
 /**

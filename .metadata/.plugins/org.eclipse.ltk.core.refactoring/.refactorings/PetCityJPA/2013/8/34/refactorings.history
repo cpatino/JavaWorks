@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring accessors="true" comment="Delete element from project &apos;PetCityJPA&apos;&#x0D;&#x0A;- Original project: &apos;PetCityJPA&apos;&#x0D;&#x0A;- Original element: &apos;PetCityJPA/src/main.java.co.com.carp.petcity.jpa.entity&apos;" description="Delete element" element1="/src&lt;main.java.co.com.carp.petcity.jpa.entity" element2="/src&lt;main.java.co.com.carp.petcity.jpa" element3="/src&lt;main.java.co.com.carp.petcity" element4="/src&lt;main.java.co.com.carp" element5="/src&lt;main.java.co.com" element6="/src&lt;main.java.co" element7="/src&lt;main.java" element8="/src&lt;main" elements="8" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1377140266508" subPackages="false" version="1.0"/>
-</session>

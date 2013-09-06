@@ -7,11 +7,6 @@ import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACT
 import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_SAVE;
 import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_VIEW_NOTES;
 
-import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -19,8 +14,6 @@ import java.util.TreeSet;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-import org.apache.log4j.Logger;
 
 import co.com.carp.petcity.dao.OwnerDAO;
 import co.com.carp.petcity.entity.Owner;

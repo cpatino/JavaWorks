@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.math.BigInteger;
 import java.util.Observable;
 
 import javax.swing.BorderFactory;
