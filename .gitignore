@@ -10,8 +10,11 @@ tmp/
 *~.nib
 local.properties
 .classpath
-.metadata\*
+metadata/
 *.snap
+*.index
+*.history
+*.properties
 
 # External tool builders
 .externalToolBuilders/
