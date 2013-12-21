@@ -15,7 +15,6 @@ import java.util.TreeSet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import co.com.carp.petcity.dao.OwnerDAO;
 import co.com.carp.petcity.entity.Owner;
 import co.com.carp.petcity.entity.Pet;
 import co.com.carp.petcity.entity.PetBreed;
@@ -70,10 +69,6 @@ public class OwnerAndPetsInfoController implements Observer {
 	 * @return Owner set with all information obtained from database.
 	 */
 	public Set<Owner> queryOwnerInfo(String toLookFor) {
-		OwnerDAO ownerDAO = new OwnerDAO();
-		this.ownerSet = new TreeSet<>();
-		ownerSet = ownerDAO.findOwnerForFilter(toLookFor);
-		System.out.println("Size="+ownerSet.size());
 		
 		//Fake data
 		/*Owner owner = new Owner();

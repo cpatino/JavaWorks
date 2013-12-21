@@ -22,6 +22,16 @@ public class PetBreed implements Comparable<PetBreed> {
 	 */
 	private PetType petType;
 	
+	public PetBreed() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public PetBreed(int identification, String name, PetType petType) {
+		this.identification= identification;
+		this.name = name;
+		this.petType = petType;
+	}
+	
 	/**
 	 * @return breed identification	 * 
 	 * */

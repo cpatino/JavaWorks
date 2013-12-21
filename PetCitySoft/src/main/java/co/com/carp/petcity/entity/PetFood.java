@@ -29,6 +29,13 @@ public class PetFood {
 	 */
 	private int foodBrandSelected;
 
+	
+	public PetFood(int identification,String name,Map<Integer, FoodBrand> foodBrandMap) {
+		
+		this.identification = identification;
+		this.name = name;
+		this.foodBrandMap = foodBrandMap;
+	}
 	/**
 	 * @return the identification
 	 */

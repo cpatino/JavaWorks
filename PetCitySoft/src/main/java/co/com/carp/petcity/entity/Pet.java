@@ -105,7 +105,7 @@ public class Pet {
 	/**
 	 * It contains all pet's clinic history, it includes all medical consultations.
 	 */
-	private ClinicHistory clinicHistory;
+	private Set<ClinicHistory> clinicHistorySet;
 	
 	/**
 	 * Notification message set
@@ -269,15 +269,15 @@ public class Pet {
 	/**
 	 * @return the clinicHistory
 	 */
-	public ClinicHistory getClinicHistory() {
-		return clinicHistory;
+	public Set<ClinicHistory> getClinicHistorySet() {
+		return clinicHistorySet;
 	}
 
 	/**
 	 * @param clinicHistory the clinicHistory to set
 	 */
-	public void setClinicHistory(ClinicHistory clinicHistory) {
-		this.clinicHistory = clinicHistory;
+	public void setClinicHistorySet (Set<ClinicHistory> clinicHistorySet) {
+		this.clinicHistorySet = clinicHistorySet;
 	}
 	
 	/**
@@ -306,7 +306,7 @@ public class Pet {
 		result = prime * result
 				+ ((bornPlace == null) ? 0 : bornPlace.hashCode());
 		result = prime * result
-				+ ((clinicHistory == null) ? 0 : clinicHistory.hashCode());
+				+ ((clinicHistorySet == null) ? 0 : clinicHistorySet.hashCode());
 		result = prime * result + ((color == null) ? 0 : color.hashCode());
 		result = prime * result
 				+ ((drenchingSet == null) ? 0 : drenchingSet.hashCode());
@@ -353,11 +353,11 @@ public class Pet {
 		} else if (!bornPlace.equals(other.bornPlace)) {
 			return false;
 		}
-		if (clinicHistory == null) {
-			if (other.clinicHistory != null) {
+		if (clinicHistorySet == null) {
+			if (other.clinicHistorySet != null) {
 				return false;
 			}
-		} else if (!clinicHistory.equals(other.clinicHistory)) {
+		} else if (!clinicHistorySet.equals(other.clinicHistorySet)) {
 			return false;
 		}
 		if (color == null) {
@@ -440,6 +440,6 @@ public class Pet {
 				+ ", drenching=" + drenchingSet + ", reproduction=" + reproduction
 				+ ", photo=" + photo + ", vaccineSet=" + vaccineSet
 				+ ", notificationSet=" + this.notificationSet.toString()
-				+ ", clinicHistory=" + clinicHistory + "]";
+				+ ", clinicHistory=" + clinicHistorySet + "]";
 	}
 }

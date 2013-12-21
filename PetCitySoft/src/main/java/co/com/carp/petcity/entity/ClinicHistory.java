@@ -24,12 +24,20 @@ public class ClinicHistory {
 	/**
 	 * User creator for clinic history
 	 */
-	private int userIdentification;
+	private User userIdentification;
 	
 	/**
 	 * Pet's medical consultation set
 	 */
 	private TreeSet<MedicalConsultation> consultationSet;
+	
+	
+	public ClinicHistory(int identification, Date openDate,User userIdentification,TreeSet<MedicalConsultation> consultationSet) {
+		this.identification= identification;
+		this.openDate = openDate;
+		this.userIdentification = userIdentification;
+		this.consultationSet = consultationSet;
+	}
 	
 	/**
 	 * @return the identification
@@ -62,14 +70,14 @@ public class ClinicHistory {
 	/**
 	 * @return the userIdentification
 	 */
-	public int getUserIdentification() {
+	public User getUserIdentification() {
 		return userIdentification;
 	}
 
 	/**
 	 * @param userIdentification the userIdentification to set
 	 */
-	public void setUserIdentification(int userIdentification) {
+	public void setUserIdentification(User userIdentification) {
 		this.userIdentification = userIdentification;
 	}
 
@@ -99,7 +107,7 @@ public class ClinicHistory {
 		result = prime * result + identification;
 		result = prime * result
 				+ ((openDate == null) ? 0 : openDate.hashCode());
-		result = prime * result + userIdentification;
+		result = prime * result + userIdentification.getIdentification();
 		return result;
 	}
 

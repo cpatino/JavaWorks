@@ -26,6 +26,14 @@ public abstract class Person {
 	 * Person's email
 	 */
 	private String email;
+	
+	public Person(int identification,int documentId,String name,String email) {
+		this.documentId = documentId;
+		this.identification= identification;
+		this.name= name;
+		this.email= email;
+				
+	}
 
 	/**
 	 * @return the identification

@@ -29,6 +29,13 @@ public class PetVisitInfo {
 	 */
 	private String corporalCondition;
 	
+	public PetVisitInfo(int identification,float weight,PetFood food,String corporalCondition) {
+		this.identification = identification;
+		this.weight = weight;
+		this.food = food;
+		this.corporalCondition = corporalCondition;
+	}
+	
 	/**
 	 * @return the identification
 	 */

@@ -18,6 +18,14 @@ public class User extends Person {
 	 */
 	private String password;
 	
+	
+	public User(int identification,int documentId,String name,String email,String login,String password) {
+		super(documentId, documentId, password, password);
+		this.login= login;
+		this.password= password;
+		
+	}
+	
 	@Override
 	public boolean equals(Object arg) {
 		if (super.equals(arg)) {

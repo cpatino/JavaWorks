@@ -24,6 +24,19 @@ public class PetType implements Comparable<PetType> {
 	 * when a pet type is selected.
 	 * */
 	private Set<PetBreed> breedSet;
+	
+	public PetType() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public PetType(int identification,String name) {
+		this.identification = identification;
+		this.name = name;
+	}
+	
+	
+	
+	
 
 	/**
 	 * @return the identification

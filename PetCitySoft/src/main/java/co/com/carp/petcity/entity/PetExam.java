@@ -1,6 +1,7 @@
 package co.com.carp.petcity.entity;
 
 import java.io.File;
+import java.util.Date;
 
 /**
  * This class is attempt to 
@@ -29,6 +30,20 @@ public class PetExam {
 	 * File associated with exam
 	 */
 	private File examFile;
+	
+	/**
+	 * Exam Date
+	 */
+	private Date examDate;
+	
+	
+	public PetExam(int identification,String name,String description, Date examDate,File examFile) {
+		this.identification = identification;
+		this.name = name;
+		this.description = description;
+		this.examDate = examDate;
+		this.examFile = examFile;
+	}
 	
 	/**
 	 * @return the identification
@@ -85,6 +100,25 @@ public class PetExam {
 	public void setExamFile(File examFile) {
 		this.examFile = examFile;
 	}
+	
+	/**
+	 * 
+	 * @return the examDate
+	 */
+
+	public Date getExamDate() {
+		return examDate;
+	}
+	
+	/**
+	 * 
+	 * @param examDate the examDate to set
+	 */
+
+	public void setExamDate(Date examDate) {
+		this.examDate = examDate;
+	}
+	
 
 	@Override
 	public boolean equals(Object arg) {

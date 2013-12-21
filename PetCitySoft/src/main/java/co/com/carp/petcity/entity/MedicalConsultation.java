@@ -3,6 +3,7 @@ package co.com.carp.petcity.entity;
 import java.awt.Image;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class is attempt to manage pets' medical consultation. 
@@ -59,7 +60,7 @@ public class MedicalConsultation implements Comparable<MedicalConsultation> {
 	/**
 	 * Exam associated with pet's medical consultation
 	 */
-	private PetExam exam;
+	private Set<PetExam> examSet;
 	
 	/**
 	 * An image set associated with pet's medical consultation, 
@@ -75,6 +76,10 @@ public class MedicalConsultation implements Comparable<MedicalConsultation> {
 	 */
 	private PetVisitInfo visitAdditionalInfo;
 	
+	
+	public MedicalConsultation() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	/**
 	 * @return the identification
@@ -205,15 +210,15 @@ public class MedicalConsultation implements Comparable<MedicalConsultation> {
 	/**
 	 * @return the exam
 	 */
-	public PetExam getExam() {
-		return exam;
+	public Set<PetExam> getExamSet() {
+		return examSet;
 	}
 
 	/**
 	 * @param exam the exam to set
 	 */
-	public void setExam(PetExam exam) {
-		this.exam = exam;
+	public void setExamSet(Set<PetExam> examSet) {
+		this.examSet = examSet;
 	}
 
 	/**
@@ -273,7 +278,7 @@ public class MedicalConsultation implements Comparable<MedicalConsultation> {
 				+ anamnesis + ", illness=" + illness + ", motive=" + motive
 				+ ", findings=" + findings + ", diagnosis=" + diagnosis
 				+ ", treatment=" + treatment + ", control=" + control
-				+ ", exam=" + exam + ", imageSet=" + imageSet
+				+ ", exam=" + examSet.size() + ", imageSet=" + imageSet
 				+ ", visitAdditionalInfo=" + visitAdditionalInfo + "]";
 	}
 

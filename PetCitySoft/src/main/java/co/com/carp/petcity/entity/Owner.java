@@ -10,6 +10,9 @@ import java.util.Set;
  * */
 public class Owner extends Person implements Comparable<Owner> {
 	
+
+	
+
 	/**
 	 * Owner home address
 	 */
@@ -29,6 +32,13 @@ public class Owner extends Person implements Comparable<Owner> {
 	 * Pet set from owner
 	 */
 	private Set<Pet> petSet;
+	
+	
+	public Owner(int identification, int documentId, String name, String email) {
+		super(identification, documentId, name, email);
+
+	}
+
 	
 	/**
 	 * @return the address
