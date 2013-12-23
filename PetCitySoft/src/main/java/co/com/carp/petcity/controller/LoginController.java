@@ -8,7 +8,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import co.com.carp.petcity.dao.UserDao;
 import co.com.carp.petcity.entity.User;
@@ -48,19 +47,11 @@ public class LoginController {
 		String strPassword = String.valueOf(password);
 		try {
 			String pwdEnc = Security.encrypt(strPassword);
-			UserDao dao = new UserDao();
-		    // Initialize the datasource, could /should be done of Spring
-		    // configuration
-		    DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		    dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		    dataSource.setUrl("jdbc:mysql://localhost:3306/PetCity_DogCity");
-		    dataSource.setUsername("root");
-		    dataSource.setPassword("123");
-		    // Inject the datasource into the dao
-		    dao.setDataSource(dataSource);
-		    List<User> userList = dao.selectAll();
+			pwdEnc = pwdEnc.replace("\n", "").replace("\r", "");
 			System.out.println(pwdEnc);
-			System.out.println(Security.decrypt(pwdEnc));
+			UserDao dao = new UserDao();
+		    List<User> userList = dao.selectUsingLogin(user, pwdEnc);
+			return (userList != null && userList.size() > 0);
 		} catch (NoSuchAlgorithmException ex) {
 			JOptionPane.showMessageDialog(null,
 					"No se encuentra el algoritmo de encriptación.");
@@ -71,7 +62,7 @@ public class LoginController {
 							"Un error ha ocurrido al intentar encriptar la contraseña.");
 			Logger.getLogger(this.getClass()).error(ex.getMessage());
 		}
-		return true;
+		return false;
 	}
 
 }

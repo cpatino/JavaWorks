@@ -20,23 +20,24 @@ public class PetType implements Comparable<PetType> {
 	private String name;
 	
 	/**
+	 * Pet type class
+	 */
+	private String typeClass;
+	
+	/**
 	 * A set of breed enabled to pet type, It will be only used in combo box to display values enabled 
 	 * when a pet type is selected.
 	 * */
 	private Set<PetBreed> breedSet;
 	
 	public PetType() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 	
-	public PetType(int identification,String name) {
+	public PetType(int identification, String name, String typeClass) {
 		this.identification = identification;
 		this.name = name;
 	}
-	
-	
-	
-	
 
 	/**
 	 * @return the identification
@@ -66,7 +67,19 @@ public class PetType implements Comparable<PetType> {
 		this.name = name;
 	}
 
-	
+	/**
+	 * @return the typeClass
+	 */
+	public String getTypeClass() {
+		return typeClass;
+	}
+
+	/**
+	 * @param typeClass the typeClass to set
+	 */
+	public void setTypeClass(String typeClass) {
+		this.typeClass = typeClass;
+	}
 
 	/**
 	 * @return the breedSet
@@ -99,7 +112,7 @@ public class PetType implements Comparable<PetType> {
 	@Override
 	public String toString() {
 		return "PetType [identification=" + identification + ", name=" + name
-				+ ", breedMap=" + breedSet + "]";
+				+ ", class=" + typeClass + ", breedMap=" + breedSet + "]";
 	}
 
 	@Override

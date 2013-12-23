@@ -98,6 +98,11 @@ public class Pet {
 	private Image photo;
 	
 	/**
+	 * Owner document identification
+	 */
+	private int idOwner;
+	
+	/**
 	 * Vaccines applied to pet
 	 */
 	private Set<PetVaccine> vaccineSet;
@@ -111,6 +116,26 @@ public class Pet {
 	 * Notification message set
 	 */
 	private TreeSet<Notification> notificationSet;
+
+	public Pet(int identification, String name, String color, String sex,
+			Date bornDate, String bornPlace, String reproductionState,
+			Image photo, PetBreed petBreed, int idOwner) {
+		super();
+		this.identification = identification;
+		this.name = name;
+		this.color = color;
+		this.sex = sex;
+		this.bornDate = bornDate;
+		this.bornPlace = bornPlace;
+		this.reproduction = reproductionState;
+		this.photo = photo;
+		this.breed = petBreed;
+		this.idOwner = idOwner;
+	}
+
+	public Pet() {
+		super();
+	}
 
 	/**
 	 * @return the identification
@@ -293,6 +318,20 @@ public class Pet {
 	public void setNotificationSet(TreeSet<Notification> notificationSet) {
 		this.notificationSet = notificationSet;
 	}	
+
+	/**
+	 * @return the idOwner
+	 */
+	public int getIdOwner() {
+		return idOwner;
+	}
+
+	/**
+	 * @param idOwner the idOwner to set
+	 */
+	public void setIdOwner(int idOwner) {
+		this.idOwner = idOwner;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

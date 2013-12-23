@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -24,7 +25,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import co.com.carp.petcity.controller.LoginController;
-import co.com.carp.petcity.util.Configuration;
 
 /**
  * This class is attempt to manage the application login screen.
@@ -66,11 +66,11 @@ public class JDLogin extends JDialog implements ActionListener {
 		this.setContentPane(jpPrincipal);
 		
 		
-		JLabel jlbUser = new JLabel("User:");
+		JLabel jlbUser = new JLabel("Usuario:");
 		jlbUser.setHorizontalAlignment(SwingConstants.RIGHT);
 		jlbUser.setForeground(new Color(255, 255, 255));
 		jlbUser.setFont(new Font("Verdana", Font.BOLD, 12));
-		jlbUser.setBounds(392, 81, 73, 20);
+		jlbUser.setBounds(402, 81, 73, 20);
 		jpPrincipal.add(jlbUser);
 		
 		jtfUser = new JTextField();
@@ -81,11 +81,11 @@ public class JDLogin extends JDialog implements ActionListener {
 		jtfUser.setBounds(475, 81, 186, 20);
 		jpPrincipal.add(jtfUser);
 		
-		JLabel jlbPassword = new JLabel("Password:");
+		JLabel jlbPassword = new JLabel("Contraseña:");
 		jlbPassword.setHorizontalAlignment(SwingConstants.RIGHT);
 		jlbPassword.setForeground(new Color(255, 255, 255));
 		jlbPassword.setFont(new Font("Verdana", Font.BOLD, 12));
-		jlbPassword.setBounds(392, 112, 73, 20);
+		jlbPassword.setBounds(392, 112, 83, 20);
 		jpPrincipal.add(jlbPassword);
 		
 		jbtLogin = new JButton("Entrar");
@@ -126,18 +126,18 @@ public class JDLogin extends JDialog implements ActionListener {
 	 */
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("Password options");
-		menu.setMnemonic(KeyEvent.VK_P);
+		JMenu menu = new JMenu("Opciones");
+		menu.setMnemonic(KeyEvent.VK_O);
 		
 		JMenuItem menuItem;
 		
-		menuItem = new JMenuItem("Change password", KeyEvent.VK_H);
+		menuItem = new JMenuItem("Cambiar contraseña", KeyEvent.VK_H);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_1, ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Recover password", KeyEvent.VK_R);
+		menuItem = new JMenuItem("Recuperar contraseña", KeyEvent.VK_R);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_2, ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
@@ -151,18 +151,25 @@ public class JDLogin extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent evt) {
 		LoginController loginCtrl = new LoginController();
 		if (evt.getSource().equals(jbtLogin)) {
-			if(loginCtrl.doAcceptAction(this.jtfUser.getText(), this.jpfPassword.getPassword())) {
-				this.setVisible(false);
-				Configuration.getInstance().readDatabaseConfiguration();
-				new JFOwnerAndPetsInfo().setVisible(true);
+			if (this.jtfUser.getText().trim().equals("")) {
+				JOptionPane.showMessageDialog(this, "Por favor llene la casilla del usuario", "Login", JOptionPane.INFORMATION_MESSAGE);
+			} else if (this.jpfPassword.getPassword().length == 0) {
+				JOptionPane.showMessageDialog(this, "Por favor llene la casilla de la contraseña", "Login", JOptionPane.INFORMATION_MESSAGE);
+			} else { 
+				if(loginCtrl.doAcceptAction(this.jtfUser.getText(), this.jpfPassword.getPassword())) {
+					this.setVisible(false);
+					new JFOwnerAndPetsInfo().setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(this, "Usuario o clave invalida", "Login invalido", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		} else if (evt.getSource().equals(jbtCancel)) {
 			if (loginCtrl.doCancelAction()) {
 				System.exit(EXIT_ON_CLOSE);
 			}
-		} else if (evt.getActionCommand().equals("Change password")) {
+		} else if (evt.getActionCommand().equals("Cambiar contraseña")) {
 			
-		}  else if (evt.getActionCommand().equals("Recover password")) {
+		}  else if (evt.getActionCommand().equals("Recuperar contraseña")) {
 			
 		}
 		

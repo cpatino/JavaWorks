@@ -7,6 +7,8 @@ import java.util.TreeMap;
 
 import javax.swing.JComboBox;
 
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 /**
  * This class is attempt to control all necessary configuration that will be
  * load from config.property file. All static finals variables must exists on
@@ -57,6 +59,21 @@ public class Configuration {
 	 * Configuration that stores database name.
 	 */
 	public static final String JDBC_SCHEMA = "jdbc.schema";
+	
+	/**
+	 * Configuration that stores JDBC URL.
+	 */
+	public static final String JDBC_URL = "jdbc.url";
+	
+	/**
+	 * {@link Map} object with database configuration 
+	 */
+	private Map<String, String> configMap;
+	
+	/**
+	 * {@link DriverManagerDataSource} that will be used to get access to database. 
+	 */
+	private DriverManagerDataSource dataSource;
 
 	/**
 	 * Private constructor in order to implement singleton.
@@ -79,22 +96,45 @@ public class Configuration {
 	 * 
 	 * @return {@link Map} with all configuration loaded from file.
 	 */
-	public Map<String, String> readDatabaseConfiguration() {
+	private void readDatabaseConfiguration() {
 		Properties prop = new Properties();
-		Map<String, String> configMap = new TreeMap<>();
+		configMap = new TreeMap<>();
 		try {
 			prop.load(Configuration.class
-					.getResourceAsStream("/co/com/carp/petcity/configuration/config.properties"));
+					.getResourceAsStream("/co/com/carp/petcity/configuration/database.properties"));
 			configMap.put(JDBC_USER_NAME, prop.getProperty(JDBC_USER_NAME));
 			configMap.put(JDBC_PASSWORD, prop.getProperty(JDBC_PASSWORD));
 			configMap.put(JDBC_DRIVER, prop.getProperty(JDBC_DRIVER));
 			configMap.put(JDBC_HOSTNAME, prop.getProperty(JDBC_HOSTNAME));
 			configMap.put(JDBC_PORT, prop.getProperty(JDBC_PORT));
 			configMap.put(JDBC_SCHEMA, prop.getProperty(JDBC_SCHEMA));
+			String url = prop.getProperty(JDBC_URL);
+			url = url.replace("#" + JDBC_HOSTNAME + "#", configMap.get(JDBC_HOSTNAME));
+			url = url.replace("#" + JDBC_PORT + "#", configMap.get(JDBC_PORT));
+			url = url.replace("#" + JDBC_SCHEMA + "#", configMap.get(JDBC_SCHEMA));
+			configMap.put(JDBC_URL, url);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		return configMap;
+	}
+	
+	/**
+	 * It gets {@link DriverManagerDataSource} object.
+	 * 
+	 * @return
+	 */
+	public DriverManagerDataSource getDataSource() {
+		if (dataSource == null) {
+			dataSource = new DriverManagerDataSource();
+			if (configMap == null) {
+				this.readDatabaseConfiguration();
+			}
+		    dataSource.setDriverClassName(configMap.get(JDBC_DRIVER));
+		    dataSource.setUrl(configMap.get(JDBC_URL));
+		    dataSource.setUsername(configMap.get(JDBC_USER_NAME));
+		    dataSource.setPassword(configMap.get(JDBC_PASSWORD));
+		}
+		return dataSource;
 	}
 
 }

@@ -36,7 +36,13 @@ public class Owner extends Person implements Comparable<Owner> {
 	
 	public Owner(int identification, int documentId, String name, String email) {
 		super(identification, documentId, name, email);
-
+	}
+	
+	public Owner(int identification, int documentId, String name, String email, String address, String cellphone, String phone) {
+		super(identification, documentId, name, email);
+		this.address = address;
+		this.cellphone = cellphone;
+		this.phone = phone;
 	}
 
 	

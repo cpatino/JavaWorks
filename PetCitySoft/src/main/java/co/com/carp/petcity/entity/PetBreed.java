@@ -23,7 +23,7 @@ public class PetBreed implements Comparable<PetBreed> {
 	private PetType petType;
 	
 	public PetBreed() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 	
 	public PetBreed(int identification, String name, PetType petType) {

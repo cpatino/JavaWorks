@@ -7,6 +7,7 @@ import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACT
 import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_SAVE;
 import static co.com.carp.petcity.view.JTPetCityTools.TOOLBAR_OWNER_PET_INFO_ACTION_VIEW_NOTES;
 
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.TreeSet;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import co.com.carp.petcity.dao.OwnerDao;
 import co.com.carp.petcity.entity.Owner;
 import co.com.carp.petcity.entity.Pet;
 import co.com.carp.petcity.entity.PetBreed;
@@ -69,7 +71,8 @@ public class OwnerAndPetsInfoController implements Observer {
 	 * @return Owner set with all information obtained from database.
 	 */
 	public Set<Owner> queryOwnerInfo(String toLookFor) {
-		
+		OwnerDao ownerDao = new OwnerDao();
+		this.ownerSet = new HashSet<Owner>(ownerDao.selectAll());
 		//Fake data
 		/*Owner owner = new Owner();
 		owner.setIdentification(1);
